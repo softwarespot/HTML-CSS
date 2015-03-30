@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Example 3: Dynamically displaying content without JavaScript</title>
+
+    <style type="text/css">
+        /*Body styling*/
+        body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; /*URL: http://www.cssfontstack.com/Arial*/
+        }
+
+        /*Hyperlink styling*/
+        a {
+            color: #2980b9;
+            text-decoration: none;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out; /*This stops the change in colour being too clunky, but instead with a smooth transition*/
+        }
+
+        a:hover {
+            color: #3498db;
+        }
+
+        /*Hide all checkboxes*/
+        input[type=checkbox] {
+            display: none;
+        }
+
+        /*Select all label elements that contain the class pointer*/
+        label[class*="pointer"] {
+            color: #fafafa;
+            background: #2ecc71;
+            border: 1px solid #000;
+            display: block;
+            margin: 10px 0;
+            /*Top and bottom*/
+            padding: 10px;
+        }
+
+        /*Don't display a div element placed immediately after a checkbox element*/
+        input[type=checkbox] + div {
+            display: none;
+        }
+
+        /*Display a div element placed immediately after a checkbox element when the state is checked*/
+        input[type=checkbox]:checked + div {
+            display: block;
+        }
+
+        /*Cosmetic addition to display a pointer i.e. hand*/
+        .pointer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body id="top">
+<h1>An example of hiding content without JavaScript</h1>
+
+<label for="unique-id" class="pointer">Cick to display more...</label>
+<input id="unique-id" type="checkbox">
+
+<div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+    Lorem Ipsum.
+</div>
+
+<label for="this-is-unique" class="pointer">Just for fun display me too...</label>
+<input id="this-is-unique" type="checkbox">
+
+<div>More information that was hidden from view.</div>
+<h6>Colour scheme by <a href="http://flatuicolors.com/">FlatUIColors.com</a></h6>
+</body>
+</html>

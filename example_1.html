@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Example 1: Modal popups</title>
+
+    <style type="text/css">
+        /*Body styling*/
+        body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; /*URL: http://www.cssfontstack.com/Arial*/
+        }
+
+        /*Navigation styling*/
+        nav {
+            margin: 0;
+            padding: 0;
+        }
+
+        /*Clearfix hack. Found in getskeleton.css*/
+        nav::after {
+            clear: both;
+            content: "";
+            display: block;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li a {
+            color: #222222;
+            border: 1px solid #222222;
+            border-radius: 5px;
+            float: left;
+            margin: 0 5px;
+            padding: 10px;
+            text-decoration: none;
+            /*Notice the background colour of the menu items isn't instant when changing*/
+            -webkit-transition: background .2s linear;
+            transition: background .2s linear;
+        }
+
+        /*Hovering over the menu items*/
+        nav li a:hover {
+            background: #9b59b6;
+            color: #fafafa;
+        }
+
+        /*Article styling*/
+        article {
+            background: #2ecc71;
+            color: #fafafa;
+            display: block;
+            margin: -100px;
+            padding: 0 20px;
+            position: absolute;
+            -webkit-transition: margin-left .3s ease-in;
+            transition: margin-left .3s ease-in;
+        }
+
+        /*Set the text to uppercase*/
+        article h2 {
+            text-transform: uppercase;
+        }
+
+        /*Create a dark border*/
+        article .close {
+            background: #222222;
+            border-radius: 20px;
+            color: #fafafa;
+            height: 20px;
+            padding: 5px;
+            position: absolute;
+            right: -10px;
+            text-align: center;
+            text-decoration: none;
+            top: -15px;
+            width: 20px;
+        }
+
+        /*Add X to the close button*/
+        article .close::after {
+            content: "x";
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /*If an article doesn't have focus aka :target then it's not selected and shouldn't be displayed*/
+        article:not(:target) {
+            margin-left: -100%;
+        }
+
+        /*Otherwise set the margin-left to 0 if the article has focus aka :target*/
+        article:target {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body id="top">
+<nav>
+    <ul>
+        <li><a href="#article-1">Article 1</a></li>
+        <li><a href="#article-2">Article 2</a></li>
+        <li><a href="#article-3">Article 3</a></li>
+        <li><a href="#article-4">Article 4</a></li>
+        <li><a href="#article-5">Article 5</a></li>
+    </ul>
+</nav>
+
+<h1>An example of using :target to display hidden content</h1>
+
+<p>Just select one of the item menus above to display one of the articles in a modal box. Hit the X to hide the
+    article.</p>
+
+<article id="article-1">
+    <h2>Article 1</h2>
+
+    <p>Lorem ipsum dolor sit amet...</p>
+    <a href="#top" class="close"></a> <!--Close button-->
+</article>
+
+<article id="article-2">
+    <h2>Article 2</h2>
+
+    <p>Lorem ipsum dolor sit amet...</p>
+    <a href="#top" class="close"></a> <!--Close button-->
+</article>
+
+<article id="article-3">
+    <h2>Article 3</h2>
+
+    <p>Lorem ipsum dolor sit amet...</p>
+    <a href="#top" class="close"></a> <!--Close button-->
+</article>
+
+<article id="article-4">
+    <h2>Article 4</h2>
+
+    <p>Lorem ipsum dolor sit amet...</p>
+    <a href="#top" class="close"></a> <!--Close button-->
+</article>
+
+<article id="article-5">
+    <h2>Article 5</h2>
+
+    <p>Lorem ipsum dolor sit amet...</p>
+    <a href="#top" class="close"></a> <!--Close button-->
+</article>
+<h6>Colour scheme by <a href="http://flatuicolors.com/">FlatUIColors.com</a></h6>
+</body>
+</html>

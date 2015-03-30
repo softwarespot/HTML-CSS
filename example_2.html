@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Example 2: Hover over image text</title>
+
+    <style type="text/css">
+        /*Body styling*/
+        body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; /*URL: http://www.cssfontstack.com/Arial*/
+        }
+
+        /*Hyperlink styling*/
+        a {
+            color: #2980b9;
+            text-decoration: none;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out; /*This stops the change in colour being too clunky, but instead with a smooth transition*/
+        }
+
+        a:hover {
+            color: #3498db;
+        }
+
+        /*Style the outer image element*/
+        .image-hover {
+            border: 1px solid #000;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            overflow: hidden; /*Comment this out to see the hidden content around the outer edge*/
+        }
+
+        /*Style the outer image title*/
+        .image-hover h4 {
+            background: rgba(255, 255, 255, .8);
+            display: block;
+            margin-top: -100%;
+            padding: 10px 2px;
+            position: absolute;
+            text-align: center;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out; /*The approach to smooth hovering*/
+            width: 100%;
+            z-index: 1;
+        }
+
+        /*Style the inner image element*/
+        .image-hover .image {
+            height: 400px;
+            width: 400px;
+        }
+
+        /*Style  the image inside the inner image element*/
+        .image-hover .image img {
+            height: 100%;
+            width: 100%;
+        }
+
+        /*The blue hover over set to outside the viewable area*/
+        .image-hover .hover-outside {
+            background: rgba(52, 152, 219, .6); /*Change the colour to something funky!*/
+            left: -100%;
+            min-height: 100%;
+            min-width: 100%;
+            position: absolute;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out;
+        }
+
+        /*When hovering over the element with the class .image-hover, set the h4 and .hover-outside classes to the following property: values*/
+        .image-hover:hover h4, .image-hover:hover .hover-outside {
+            margin-top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body id="top">
+<h1>An example of displaying additional content for an image on hover</h1>
+
+<div class="image-hover">
+    <h4>Image by <a href="http://imgs.xkcd.com/comics/regular_expressions.png">xkcd.com</a></h4>
+
+    <div class="hover-outside">&nbsp;</div>
+    <div class="image">
+        <img src="http://imgs.xkcd.com/comics/regular_expressions.png"/>
+    </div>
+</div>
+<h6>Colour scheme by <a href="http://flatuicolors.com/">FlatUIColors.com</a></h6>
+</body>
+</html>
