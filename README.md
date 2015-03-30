@@ -1,2 +1,2 @@
 # HTML-CSS
-HTML5 and CSS3 Snippets
+A collection of HTML5, CSS3 and JavaScript/TypeScript Snippets.
