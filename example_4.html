@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Example 4: Responsive Demo</title>
+
+    <!--Mobile Specific Metas-->
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!--Font-->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel=
+            "stylesheet">
+
+    <style type="text/css">
+        /*Body styling*/
+        body {
+            color: #fafafa;
+            font-family: 'Open Sans', sans-serif, Arial;
+            height: 100%;
+        }
+
+        /*Hyperlink styling*/
+        a {
+            color: #2980b9;
+            text-decoration: none;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out; /*This stops the change in colour being too clunky, but instead with a smooth transition*/
+        }
+
+        a:hover {
+            color: #3498db;
+        }
+
+        /*Set the margin and padding to zero i.e. zero out the following elements*/
+        body,
+        div,
+        html,
+        h1,
+        h2,
+        nav,
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            position: relative;
+        }
+
+        header,
+        footer {
+            background: #9b59b6;
+            font-weight: bold;
+            padding: 60px 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        nav ul li {
+            display: block;
+            list-style: none;
+        }
+
+        nav ul a {
+            background: #27ae60;
+            color: #fafafa;
+            display: block;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        nav ul a:hover {
+            background: #2ecc71;
+            color: inherit;
+        }
+
+        article {
+            color: #000;
+        }
+
+        article h2 {
+            background: #27ae60;
+            color: #fafafa;
+            margin: 10px 0;
+            padding: 10px;
+            text-transform: uppercase;
+        }
+
+        /*Mobile first queries by getskeleton.com*/
+        /* Larger than mobile */
+        @media (min-width: 400px) {
+        }
+
+        /* Larger than phablet */
+        @media (min-width: 550px) {
+            nav {
+                margin: 10px 0 5px 0;
+            }
+
+            nav ul li {
+                display: inline-block;
+            }
+        }
+
+        /* Larger than tablet */
+        @media (min-width: 750px) {
+            nav {
+                float: left;
+                min-height: 100%;
+                width: 30%;
+            }
+
+            nav ul li {
+                padding: 0 20px 0 0;
+                display: block;
+            }
+
+            section {
+                display: inline-block;
+                width: 70%;
+            }
+
+            /*Clearfix hack. Found in getskeleton.css*/
+            section::after {
+                clear: both;
+                content: "";
+                display: block;
+            }
+        }
+
+        /* Larger than desktop */
+        @media (min-width: 1000px) {
+        }
+
+        /* Larger than Desktop HD */
+        @media (min-width: 1200px) {
+        }
+    </style>
+</head>
+
+<body id="top">
+<div id="container">
+    <header>
+        <h1>Responsive Demo</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="#article-1">Introduction</a>
+            </li>
+
+            <li>
+                <a href="#article-2">Article 2</a>
+            </li>
+
+            <li>
+                <a href="#article-3">Article 3</a>
+            </li>
+
+            <li>
+                <a href="#article-4">Article 4</a>
+            </li>
+
+            <li>
+                <a href="#article-5">Article 5</a>
+            </li>
+
+            <li>
+                <a href="#article-6">Article 6</a>
+            </li>
+        </ul>
+    </nav>
+
+    <section>
+        <article id="article-1">
+            <h2>Article 1</h2>The following site is a demonstration of how to create a responsive site, by starting from
+            the perspective of a mobile phone and working outwards. Check out my <a
+                href="http://github.ciom/softwarespot">github</a> profile for more examples.
+        </article>
+
+        <article id="article-2">
+            <h2>Article 2</h2>Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Proin at purus at tortor elementum
+            rhoncus. Cras sit amet feugiat augue, ut hendrerit magna.
+            Sed vitae mi nulla. Fusce quis orci est. Vestibulum
+            dignissim rutrum erat, ut ultrices ipsum accumsan quis.
+            Mauris euismod hendrerit nulla in sagittis. Vivamus eget
+            lorem vel orci pulvinar finibus. Nulla malesuada lorem sed
+            tortor porta, nec scelerisque leo dapibus. Nullam sit amet
+            erat non enim convallis commodo. Nunc molestie, sapien sit
+            amet condimentum egestas, augue nibh ultricies ipsum, non
+            lacinia diam neque in erat. Nam ullamcorper mauris eget
+            tempus eleifend. Phasellus pulvinar euismod ipsum eu
+            varius.
+        </article>
+
+        <article id="article-3">
+            <h2>Article 3</h2>Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Proin at purus at tortor elementum
+            rhoncus. Cras sit amet feugiat augue, ut hendrerit magna.
+            Sed vitae mi nulla. Fusce quis orci est. Vestibulum
+            dignissim rutrum erat, ut ultrices ipsum accumsan quis.
+            Mauris euismod hendrerit nulla in sagittis. Vivamus eget
+            lorem vel orci pulvinar finibus. Nulla malesuada lorem sed
+            tortor porta, nec scelerisque leo dapibus. Nullam sit amet
+            erat non enim convallis commodo. Nunc molestie, sapien sit
+            amet condimentum egestas, augue nibh ultricies ipsum, non
+            lacinia diam neque in erat. Nam ullamcorper mauris eget
+            tempus eleifend. Phasellus pulvinar euismod ipsum eu
+            varius.
+        </article>
+
+        <article id="article-4">
+            <h2>Article 4</h2>Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Proin at purus at tortor elementum
+            rhoncus. Cras sit amet feugiat augue, ut hendrerit magna.
+            Sed vitae mi nulla. Fusce quis orci est. Vestibulum
+            dignissim rutrum erat, ut ultrices ipsum accumsan quis.
+            Mauris euismod hendrerit nulla in sagittis. Vivamus eget
+            lorem vel orci pulvinar finibus. Nulla malesuada lorem sed
+            tortor porta, nec scelerisque leo dapibus. Nullam sit amet
+            erat non enim convallis commodo. Nunc molestie, sapien sit
+            amet condimentum egestas, augue nibh ultricies ipsum, non
+            lacinia diam neque in erat. Nam ullamcorper mauris eget
+            tempus eleifend. Phasellus pulvinar euismod ipsum eu
+            varius.
+        </article>
+
+        <article id="article-5">
+            <h2>Article 5</h2>Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Proin at purus at tortor elementum
+            rhoncus. Cras sit amet feugiat augue, ut hendrerit magna.
+            Sed vitae mi nulla. Fusce quis orci est. Vestibulum
+            dignissim rutrum erat, ut ultrices ipsum accumsan quis.
+            Mauris euismod hendrerit nulla in sagittis. Vivamus eget
+            lorem vel orci pulvinar finibus. Nulla malesuada lorem sed
+            tortor porta, nec scelerisque leo dapibus. Nullam sit amet
+            erat non enim convallis commodo. Nunc molestie, sapien sit
+            amet condimentum egestas, augue nibh ultricies ipsum, non
+            lacinia diam neque in erat. Nam ullamcorper mauris eget
+            tempus eleifend. Phasellus pulvinar euismod ipsum eu
+            varius.
+        </article>
+
+        <article id="article-6">
+            <h2>Article 6</h2>Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Proin at purus at tortor elementum
+            rhoncus. Cras sit amet feugiat augue, ut hendrerit magna.
+            Sed vitae mi nulla. Fusce quis orci est. Vestibulum
+            dignissim rutrum erat, ut ultrices ipsum accumsan quis.
+            Mauris euismod hendrerit nulla in sagittis. Vivamus eget
+            lorem vel orci pulvinar finibus. Nulla malesuada lorem sed
+            tortor porta, nec scelerisque leo dapibus. Nullam sit amet
+            erat non enim convallis commodo. Nunc molestie, sapien sit
+            amet condimentum egestas, augue nibh ultricies ipsum, non
+            lacinia diam neque in erat. Nam ullamcorper mauris eget
+            tempus eleifend. Phasellus pulvinar euismod ipsum eu
+            varius.
+        </article>
+    </section>
+
+    <footer>
+        SoftwareSpot &copy; 2015
+    </footer>
+</div>
+</body>
+</html>
