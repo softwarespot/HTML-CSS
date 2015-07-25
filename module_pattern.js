@@ -1,4 +1,4 @@
-var Namespace = (function (window, document) {
+var Namespace = (function (window, document, undefined) {
     // Constants
     
     // Configuration
@@ -17,4 +17,4 @@ var Namespace = (function (window, document) {
     return {
 		// outer: inner
     };
-})(window, document);
+})(window, document, undefined);
