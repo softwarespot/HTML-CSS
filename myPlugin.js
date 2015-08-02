@@ -1,4 +1,4 @@
-(function($, undefined) {
+; (function($, undefined) {
 
     // Plugin Logic
     $.fn.extend({
@@ -34,6 +34,6 @@
 // Initialise when the DOM is ready
 $(function () {
 
-  $('div').myPlugin();
+  // $('div').myPlugin();
 
 });
