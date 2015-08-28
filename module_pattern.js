@@ -9,12 +9,12 @@ var Namespace = (function (window, document, undefined) {
     // Fields
 
     // Methods
-    var init = function () {
-
+    function init() {
+        // Empty
     };
 
     // Public API
     return {
-		// outer: inner
+        // outer: inner
     };
 })(window, document);

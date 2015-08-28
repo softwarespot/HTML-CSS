@@ -3,7 +3,7 @@
     // Plugin Logic
     $.fn.extend({
 
-        myPlugin: function(options) {
+        myPlugin: function (options) {
 
             console.log('Plugin has been called');
 
