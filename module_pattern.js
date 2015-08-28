@@ -11,7 +11,7 @@ var Namespace = (function (window, document, undefined) {
     // Methods
     function init() {
         // Empty
-    };
+    }
 
     // Public API
     return {
