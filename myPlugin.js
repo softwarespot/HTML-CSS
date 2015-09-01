@@ -1,4 +1,5 @@
-; (function($, undefined) {
+; // jshint ignore:line
+(function($, undefined) {
 
     // Plugin Logic
     $.fn.extend({
