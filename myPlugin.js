@@ -2,6 +2,7 @@
 (function($, undefined) {
 
     // Plugin Logic
+
     $.fn.extend({
 
         myPlugin: function (options) {
