@@ -1,7 +1,7 @@
-/* global */
+/* global App */
 
 // Create an 'App' namespace if it doesn't already exist
-var App = App || {};
+App = App || {};
 
 /**
  * Base module
@@ -16,7 +16,7 @@ App.base = (function ($, window, document, undefined) {
     var VERSION = '1.0.0';
 
     // Unique global identifier. Internal usage only
-    // var GUID = 'EBF09F7D-008B-4B56-8227-0B5378649968';
+    // var GUID = '27AB85AB-3AD5-42C6-A086-30FF65668693';
 
     // Fields
 
@@ -34,8 +34,15 @@ App.base = (function ($, window, document, undefined) {
         // Combine the passed config
         $.extend(defaultConfig, config);
 
-        cacheDom();
+        _cacheDom();
     }
+
+    /**
+     * Destroy the module
+     *
+     * @return {undefined}
+     */
+    function destroy() {}
 
     /**
      * Get the version number of the module
@@ -51,15 +58,17 @@ App.base = (function ($, window, document, undefined) {
      *
      * @return {undefined}
      */
-    function cacheDom() {}
+    function _cacheDom() {}
 
     // Invoked when the DOM has loaded
     $(function () {
-        init({});
+        // init({});
     });
 
     // Public API
     return {
+        init: init,
+        destroy: destroy,
         getVersion: getVersion
     };
 })(jQuery, window, document);
