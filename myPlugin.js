@@ -31,7 +31,7 @@
 
     };
 
-})(jQuery);
+})(this.jQuery);
 
 // Initialise when the DOM is ready
 $(function () {
