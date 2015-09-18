@@ -42,7 +42,9 @@ App.base = (function (window, document, $, undefined) {
      *
      * @return {undefined}
      */
-    function destroy() {}
+    function destroy() {
+        // Empty
+    }
 
     /**
      * Get the version number of the module
@@ -58,7 +60,9 @@ App.base = (function (window, document, $, undefined) {
      *
      * @return {undefined}
      */
-    function _cacheDom() {}
+    function _cacheDom() {
+        // Empty
+    }
 
     // Invoked when the DOM has loaded
     $(function () {

@@ -58,7 +58,9 @@
      *
      * @return {undefined}
      */
-    function destroy() {}
+    function destroy() {
+        // Empty
+    }
 
     /**
      * Get the version number of the module
@@ -74,7 +76,9 @@
      *
      * @return {undefined}
      */
-    function _cacheDom() {}
+    function _cacheDom() {
+        // Empty
+    }
 
     // Invoked when the DOM has loaded
     $(function () {
