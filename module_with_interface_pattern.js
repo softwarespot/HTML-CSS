@@ -8,10 +8,10 @@
     // Module related logic, URL: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
 
     // Store a 'module' reference
-    const module = global.module;
+    var module = global.module;
 
     // Store a 'define' reference
-    const define = global.define;
+    var define = global.define;
 
     if (typeof module !== 'undefined' && module.exports) {
         // Node.js Module
