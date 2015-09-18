@@ -36,6 +36,9 @@
 
     // Fields
 
+    // Store if the module has been initialised
+    var _isInitialised = false;
+
     // Methods
 
     /**
@@ -51,6 +54,8 @@
         $.extend(defaultConfig, config);
 
         _cacheDom();
+
+        _isInitialised = true;
     }
 
     /**
@@ -59,7 +64,7 @@
      * @return {undefined}
      */
     function destroy() {
-        // Empty
+        _isInitialised = false;
     }
 
     /**

@@ -20,6 +20,9 @@ App.base = (function (window, document, $, undefined) {
 
     // Fields
 
+    // Store if the module has been initialised
+    var _isInitialised = false;
+
     // Methods
 
     /**
@@ -35,6 +38,8 @@ App.base = (function (window, document, $, undefined) {
         $.extend(defaultConfig, config);
 
         _cacheDom();
+
+        _isInitialised = true;
     }
 
     /**
@@ -43,7 +48,7 @@ App.base = (function (window, document, $, undefined) {
      * @return {undefined}
      */
     function destroy() {
-        // Empty
+        _isInitialised = false;
     }
 
     /**
