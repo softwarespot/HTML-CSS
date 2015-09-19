@@ -4,7 +4,7 @@
  * Modified: YYYY/MM/DD
  * @author author
  */
-(function (global, name, iModule) {
+(function (global, name, iModule, undefined) {
     // Module related logic, URL: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
 
     // Store a 'module' reference
@@ -13,7 +13,7 @@
     // Store a 'define' reference
     var define = global.define;
 
-    if (typeof module !== 'undefined' && module.exports) {
+    if (module !== undefined && module.exports) {
         // Node.js Module
         module.exports = iModule;
     } else if (typeof define === 'function' && define.amd) {
