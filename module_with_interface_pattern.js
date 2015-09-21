@@ -19,8 +19,10 @@
     } else if (typeof define === 'function' && define.amd) {
         // AMD Module
         global.define(name, [], iModule);
+    } else if (global[name] === undefined) {
+        global[name] = iModule; // new iModule() if an ES2015 class
     } else {
-        global[name] = iModule(); // Or new iModule() if an ES2015 class
+        throw new Error('iModule appears to be already registered with the global object, therefore the module has not be registered.');
     }
 
 })(this, 'moduleName', (function (window, document, $, undefined) {
