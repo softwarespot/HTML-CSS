@@ -22,7 +22,7 @@
     } else if (global[name] === undefined) {
         global[name] = iModule; // new iModule() if an ES2015 class
     } else {
-        throw new Error('iModule appears to be already registered with the global object, therefore the module has not be registered.');
+        throw new Error('iModule appears to be already registered with the global object, therefore the module has not been registered.');
     }
 
 })(this, 'moduleName', (function (window, document, $, undefined) {
