@@ -4,7 +4,7 @@
  * Modified: YYYY/MM/DD
  * @author author
  */
-(function (global, name, iModule, undefined) {
+(function (global, name, IModule, undefined) {
     // Module related logic, URL: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
 
     // Store a 'module' reference
@@ -15,14 +15,14 @@
 
     if (module !== undefined && module.exports) {
         // Node.js Module
-        module.exports = iModule;
+        module.exports = IModule;
     } else if (typeof define === 'function' && define.amd) {
         // AMD Module
-        global.define(name, [], iModule);
+        global.define(name, [], IModule);
     } else if (global[name] === undefined) {
-        global[name] = iModule; // new iModule() if an ES2015 class
+        global[name] = IModule; // new IModule() if an ES2015 class
     } else {
-        throw new Error('iModule appears to be already registered with the global object, therefore the module has not been registered.');
+        throw new Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');
     }
 
 })(this, 'moduleName', (function (window, document, $, undefined) {
