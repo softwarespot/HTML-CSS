@@ -4,7 +4,7 @@
  * Modified: YYYY/MM/DD
  * @author author
  */
-(function (global, name, IModule, undefined) {
+(function baseModule(global, name, IModule, undefined) {
     // Module related logic, URL: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
 
     // Store a 'module' reference
@@ -25,7 +25,7 @@
         throw new global.Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');
     }
 
-})(this, 'moduleName', (function (window, document, $, undefined) {
+})(window, 'moduleName', (function baseInterface(window, document, $, undefined) {
     // Interface related logic
 
     // Constants
@@ -88,7 +88,7 @@
     }
 
     // Invoked when the DOM has loaded
-    $(function () {
+    $(function baseInterfaceReady() {
         // init({});
     });
 
@@ -96,6 +96,6 @@
     return {
         init: init,
         destroy: destroy,
-        getVersion: getVersion
+        getVersion: getVersion,
     };
-})(this, this.document, this.jQuery));
+})(window, window.document, window.jQuery));
