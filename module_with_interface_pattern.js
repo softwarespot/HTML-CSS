@@ -5,21 +5,22 @@
  * @author author
  */
 (function baseModule(global, name, IModule, undefined) {
-    // Module related logic, URL: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
-
-    // Store a 'module' reference
-    var module = global.module;
+    // UMD (Universal Module Definition), URL: https://github.com/umdjs/umd or http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
 
     // Store a 'define' reference
     var define = global.define;
 
-    if (module !== undefined && module.exports) {
-        // Node.js Module
-        module.exports = IModule;
-    } else if (typeof define === 'function' && define.amd) {
+    // Store a 'module' reference
+    var module = global.module;
+
+    if (typeof define === 'function' && define.amd) {
         // AMD Module
         global.define(name, [], IModule);
+    } else if (module !== undefined && module.exports) {
+        // Node.js Module
+        module.exports = IModule;
     } else if (global[name] === undefined) {
+        // Global e.g. window
         global[name] = IModule; // new IModule() if an ES2015 class
     } else {
         throw new global.Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');

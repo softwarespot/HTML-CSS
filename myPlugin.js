@@ -27,9 +27,9 @@
 
     };
 
-})(window, window.jQuery);
+    // Initialise when the DOM is ready
+    $(function myPluginReady() {
+        // $('div').myPlugin();
+    });
 
-// Initialise when the DOM is ready
-$(function myPluginReady() {
-    // $('div').myPlugin();
-});
+})(window, window.jQuery);
