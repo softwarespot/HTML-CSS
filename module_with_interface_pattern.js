@@ -6,6 +6,7 @@
  */
 (function baseModule(global, name, IModule, undefined) {
     // UMD (Universal Module Definition), URL: https://github.com/umdjs/umd or http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
+    // More info, URL: http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
     // Store a 'define' reference
     var define = global.define;
@@ -15,13 +16,13 @@
 
     if (typeof define === 'function' && define.amd) {
         // AMD Module
-        global.define(name, [], IModule);
+        global.define(name, [], IModule(global, global.document, global.$));
     } else if (module !== undefined && module.exports) {
         // Node.js Module
-        module.exports = IModule;
+        module.exports = IModule(global, global.document, global.$);
     } else if (global[name] === undefined) {
         // Global e.g. window
-        global[name] = IModule; // new IModule() if an ES2015 class
+        global[name] = IModule(global, global.document, global.$); // new IModule() if an ES2015 class
     } else {
         throw new global.Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');
     }
@@ -99,4 +100,4 @@
         destroy: destroy,
         getVersion: getVersion,
     };
-})(window, window.document, window.jQuery));
+}));
