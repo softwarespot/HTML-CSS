@@ -27,7 +27,7 @@
         throw new global.Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');
     }
 
-})(window, 'moduleName', (function baseInterface(window, document, $, undefined) {
+})(window, 'moduleName', function baseInterface(window, document, $, undefined) {
     // Interface related logic
 
     // Constants
@@ -100,4 +100,4 @@
         destroy: destroy,
         getVersion: getVersion,
     };
-}));
+});
