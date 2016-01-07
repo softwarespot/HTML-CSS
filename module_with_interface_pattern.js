@@ -4,29 +4,28 @@
  * Modified: YYYY/MM/DD
  * @author author
  */
-(function baseModule(global, name, IModule, undefined) {
+(function baseModule(root, name, factory, undefined) {
     // UMD (Universal Module Definition), URL: https://github.com/umdjs/umd or http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
     // More info, URL: http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
     // Store a 'define' reference
-    var define = global.define;
+    var define = root.define;
 
     // Store a 'module' reference
-    var module = global.module;
+    var module = root.module;
 
     if (typeof define === 'function' && define.amd) {
         // AMD Module
-        global.define(name, [], IModule(global, global.document, global.$));
+        root.define(name, [], factory(root, root.document, root.$));
     } else if (module !== undefined && module.exports) {
         // Node.js Module
-        module.exports = IModule(global, global.document, global.$);
-    } else if (global[name] === undefined) {
-        // Global e.g. window
-        global[name] = IModule(global, global.document, global.$); // new IModule() if an ES2015 class
+        module.exports = factory(root, root.document, root.$);
+    } else if (root[name] === undefined) {
+        // root e.g. window
+        root[name] = factory(root, root.document, root.$); // new factory() if an ES2015 class
     } else {
-        throw new global.Error('IModule appears to be already registered with the global object, therefore the module has not been registered.');
+        throw new root.Error('factory appears to be already registered with the root object, therefore the module has not been registered.');
     }
-
 })(window, 'moduleName', function baseInterface(window, document, $, undefined) {
     // Interface related logic
 
