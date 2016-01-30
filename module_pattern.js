@@ -80,4 +80,4 @@ App.base = (function baseModule(window, document, $, undefined) {
         destroy: destroy,
         getVersion: getVersion,
     };
-})(window, window.document, window.jQuery);
+}(window, window.document, window.jQuery));
