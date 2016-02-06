@@ -9,7 +9,7 @@ App = App || {};
  * Modified: YYYY/MM/DD
  * @author author
  */
-App.base = (function baseModule(window, document, $, undefined) {
+App.base = (function baseModule(window, document, $) {
     // Constants
 
     // SemVer version number of the module

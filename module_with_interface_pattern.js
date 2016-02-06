@@ -4,7 +4,7 @@
  * Modified: YYYY/MM/DD
  * @author author
  */
-(function baseModule(root, name, factory, undefined) {
+(function baseModule(root, name, factory) {
     // UMD (Universal Module Definition), URL: https://github.com/umdjs/umd or http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailcommonjs
     // More info, URL: http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
 
@@ -26,7 +26,7 @@
     } else {
         throw new root.Error('factory appears to be already registered with the root object, therefore the module has not been registered.');
     }
-}(window, 'moduleName', function baseInterface(window, document, $, undefined) {
+}(window, 'moduleName', function baseInterface(window, document, $) {
     // Interface related logic
 
     // Constants

@@ -1,5 +1,4 @@
-; // jshint ignore:line
-(function jQueryMyPluginNamespace(window, $, undefined) {
+(function jQueryMyPluginNamespace(window, $) {
     // Plugin Logic
 
     $.fn.extend({
