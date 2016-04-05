@@ -6,8 +6,10 @@
     return {
         after: after,
         append: append,
-        around: around,
+        around: wrap,
         before: before,
+        empty: empty,
+        getComputedStyles: getComputedStyles,
         inside: append,
         prepend: prepend,
         remove: remove,
@@ -50,6 +52,27 @@
         if (!_isNil(el.parentNode)) {
             el.parentNode.insertBefore(elBefore, el);
         }
+    }
+
+    /**
+     * Empty the contents of an element node
+     * Idea by dom.js, URL: https://github.com/component/dom/blob/master/dom.js#L2789
+     *
+     * @param {HTMLElement} elAfter Element node to empty
+     * @return {undefined}
+     */
+    function empty(el) {
+        el.textContent = '';
+    }
+
+    /**
+     * Get the computed styles of an element
+     *
+     * @param {HTMLElement} el Element node to get the styles of
+     * @return {undefined}
+     */
+    function getComputedStyles(el) {
+        el.ownerDocument.defaultView.getComputedStyle(el, null);
     }
 
     /**
