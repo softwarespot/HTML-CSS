@@ -1,10 +1,18 @@
-(function domModule() {
+(function domModule(Object) {
+    // Fields
+    var _nativeObjectToString = Object.prototype.toString;
+
     // Public API
     return {
         after: after,
-        before: before,
         append: append,
-        preappend: preappend
+        around: around,
+        before: before,
+        inside: append,
+        prepend: prepend,
+        remove: remove,
+        start: prepend,
+        wrap: wrap
     };
 
     /**
@@ -15,18 +23,9 @@
      * @return {undefined}
      */
     function after(el, elAfter) {
-        el.parentNode.insertBefore(elAfter, el.nextSibling);
-    }
-
-    /**
-     * Insert an element before an element node
-     *
-     * @param {HTMLElement} el Element node to insert before
-     * @param {HTMLElement} elAfter Element node to insert
-     * @return {undefined}
-     */
-    function before(el, elBefore) {
-        el.parentNode.insertBefore(elBefore, el);
+        if (!_isNil(el.parentNode)) {
+            el.parentNode.insertBefore(elAfter, el.nextSibling);
+        }
     }
 
     /**
@@ -41,13 +40,82 @@
     }
 
     /**
+     * Insert an element before an element node
+     *
+     * @param {HTMLElement} el Element node to insert before
+     * @param {HTMLElement} elAfter Element node to insert
+     * @return {undefined}
+     */
+    function before(el, elBefore) {
+        if (!_isNil(el.parentNode)) {
+            el.parentNode.insertBefore(elBefore, el);
+        }
+    }
+
+    /**
      * Insert an element before an element node's content
      *
      * @param {HTMLElement} el Element node to insert before
      * @param {HTMLElement} elAfter Element node to insert
      * @return {undefined}
      */
-    function preappend(el, elBefore) {
+    function prepend(el, elBefore) {
         el.insertBefore(elBefore, el.firstChild);
     }
-}());
+
+    /**
+     * Remove an element
+     *
+     * @param {HTMLElement} el Element node to remove
+     * @return {undefined}
+     */
+    function remove(el) {
+        if (_isFunction(el.remove)) {
+            el.remove();
+        } else if (!_isNil(el.parentNode)) {
+            el.parentNode.removeChild(el);
+        }
+    }
+
+    /**
+     * [wrap description]
+     *
+     * @param {HTMLElement} el Element node to wrap around
+     * @param {HTMLElement} elWrap Element node to wrap with
+     * @return {undefined}
+     */
+    function wrap(el, elWrap) {
+        before(el, elWrap);
+
+        // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
+        var reIsTemplate = /^template$/i;
+        if (reIsTemplate.test(elWrap.nodeName) && !_isNil(elWrap.content)) {
+            elWrap = elWrap.content;
+        }
+
+        elWrap.appendChild(el);
+    }
+
+    // Helper functions
+
+    /**
+     * Check if a variable is a function datatype
+     *
+     * @param {mixed} value Value to check
+     * @returns {boolean} True, the value is a function datatype; otherwise, false
+     */
+    function _isFunction(value) {
+        var tag = _nativeObjectToString.call(value);
+        return tag === '[object Function]' || tag === '[object GeneratorFunction]';
+    }
+
+    /**
+     * Check if a variable is null or undefined
+     *
+     * @param {mixed} value Value to check
+     * @returns {boolean} True, the value is null or undefined; otherwise, false
+     */
+    function _isNil(value) {
+        return value === null || value === undefined;
+    }
+}(window.Object));
