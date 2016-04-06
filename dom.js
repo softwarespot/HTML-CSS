@@ -16,7 +16,8 @@
         renew: replace,
         replace: replace,
         start: prepend,
-        wrap: wrap
+        wrap: wrap,
+        unwrap: unwrap
     };
 
     /**
@@ -131,6 +132,23 @@
         }
 
         elWrap.appendChild(el);
+    }
+
+    /**
+     * Unwrap an element node
+     * Idea by plainjs.com, URL: https://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/
+     *
+     * @param {HTMLElement} el Element node to unwrap
+     * @return {undefined}
+     */
+    function unwrap(el) {
+        var parent = el.parentNode;
+
+        while (!_isNil(el.firstChild)) {
+            parent.insertBefore(el.firstChild, el);
+        }
+
+        parent.removeChild(el);
     }
 
     // Helper functions
