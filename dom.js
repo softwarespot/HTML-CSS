@@ -13,6 +13,8 @@
         inside: append,
         prepend: prepend,
         remove: remove,
+        renew: replace,
+        replace: replace,
         start: prepend,
         wrap: wrap
     };
@@ -101,7 +103,19 @@
     }
 
     /**
-     * [wrap description]
+     * Replace an element node with another element node
+     *
+     * @param {HTMLElement} el Element node to replace
+     * @param {HTMLElement} elReplacement Element node to replace with
+     * @return {undefined}
+     */
+    function replace(el, elReplacement) {
+        before(el, elReplacement);
+        remove(el);
+    }
+
+    /**
+     * Wrap an element node with another element node
      *
      * @param {HTMLElement} el Element node to wrap around
      * @param {HTMLElement} elWrap Element node to wrap with
@@ -111,7 +125,7 @@
         before(el, elWrap);
 
         // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
-        var reIsTemplate = /^template$/i;
+        var reIsTemplate = /(?:^template$)/i;
         if (reIsTemplate.test(elWrap.nodeName) && !_isNil(elWrap.content)) {
             elWrap = elWrap.content;
         }
