@@ -11,6 +11,7 @@
         empty: empty,
         getComputedStyles: getComputedStyles,
         inside: append,
+        parent: parent,
         prepend: prepend,
         remove: remove,
         renew: replace,
@@ -76,6 +77,21 @@
      */
     function getComputedStyles(el) {
         el.ownerDocument.defaultView.getComputedStyle(el, null);
+    }
+
+    /**
+     * Get the parent of an element node
+     *
+     * @param {HTMLElement} el Element node to get the parent of
+     * @return {HTMLElement|null} Element node; otherwise, null
+     */
+    function parent(el) {
+        var parent = el.parentNode;
+        if (_isNil(parent) || parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+            return null;
+        }
+
+        return parent;
     }
 
     /**
