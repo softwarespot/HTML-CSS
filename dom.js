@@ -58,6 +58,10 @@
         }
     }
 
+    // Idea URL: https://github.com/jonathantneal/closest/blob/master/closest.js
+    // function closest() {
+    // }
+
     /**
      * Empty the contents of an element node
      * Idea by dom.js, URL: https://github.com/component/dom/blob/master/dom.js#L2789
@@ -78,6 +82,10 @@
     function getComputedStyles(el) {
         el.ownerDocument.defaultView.getComputedStyle(el, null);
     }
+
+    // Idea URL: https://github.com/jonathantneal/closest/blob/master/closest.js
+    // function matches() {
+    // }
 
     /**
      * Get the parent of an element node
