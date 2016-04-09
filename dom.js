@@ -157,7 +157,7 @@ var domElements = (function domElementsModule(document, Array, Element) {
      *
      * @param {string} selector Selector string
      * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
-     * @return {Node|null} See documentation for *.querySelector
+     * @return {Node|null} A node; otherwise, null on error
      */
     function dollar(selector, context) {
         return (context || document).querySelector(selector);
@@ -168,7 +168,7 @@ var domElements = (function domElementsModule(document, Array, Element) {
      *
      * @param {string} selector Selector string
      * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
-     * @return {Node|null} See documentation for *.querySelectorAll
+     * @return {array} An array of nodes; otherwise, an empty array on error
      */
     function dollarDollar(selector, context) {
         return _arrayFrom((context || document).querySelectorAll(selector));
