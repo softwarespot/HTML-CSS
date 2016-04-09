@@ -1,9 +1,6 @@
 var domElements = (function domElementsModule(document, Array, Element, Node, Object, Window) {
     // Fields
 
-    // Parsing the native toString() return value e.g. [object Object]
-    var _reTypeOf = /(?:^\[object\s(.*?)\]$)/;
-
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
     var _nodeTypeFragmentNode = Node.DOCUMENT_FRAGMENT_NODE;
@@ -45,10 +42,14 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
                 index++;
             }
 
+            // Coerce as a boolean datatype
             return !!nodes[index];
         };
 
     var _objectToString = Object.prototype.toString;
+
+    // Parsing the native toString() return value e.g. [object Object]
+    var _reTypeOf = /(?:^\[object\s(.*?)\]$)/;
 
     // Public API
     return {
