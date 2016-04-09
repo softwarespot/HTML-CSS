@@ -174,12 +174,10 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {array} Array of nodes/elements; otherwise, an empty array on error
      */
     function children(node, jQueryLike) {
-        var nodes = node.childNodes;
-
         // Enforce the default value
         var allNodes = jQueryLike !== true;
 
-        return _arrayFilter.call(nodes, function filter(node) {
+        return _arrayFilter.call(node.childNodes, function filter(node) {
             return allNodes || node.nodeType === _nodeTypeElementNode;
         });
     }
@@ -273,7 +271,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {Node} Next sibling nodes; otherwise, null on error
      */
     function next(node, jQueryLike) {
-        return _node(node, jQueryLike, 'nextSibling');
+        return _sibling(node, node, jQueryLike, 'nextSibling');
     }
 
     /**
@@ -284,7 +282,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {array} Array of next sibling nodes; otherwise, an empty array on error
      */
     function nextAll(node, jQueryLike) {
-        return _nodeAll(node, jQueryLike, 'nextSibling');
+        return _siblingAll(node, node, jQueryLike, 'nextSibling');
     }
 
     /**
@@ -336,7 +334,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {Node} Previous sibling nodes; otherwise, null on error
      */
     function previous(node, jQueryLike) {
-        return _node(node, jQueryLike, 'previousSibling');
+        return _sibling(node, node, jQueryLike, 'previousSibling');
     }
 
     /**
@@ -347,7 +345,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {array} Array of previous sibling nodes; otherwise, an empty array on error
      */
     function previousAll(node, jQueryLike) {
-        return _nodeAll(node, jQueryLike, 'previousSibling');
+        return _siblingAll(node, node, jQueryLike, 'previousSibling');
     }
 
     /**
@@ -384,7 +382,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      */
     function siblings(node, jQueryLike) {
         // Could use node.parentNode.children if other node types are not required
-        return _nodeAll((node.parentNode || _objectEmpty).firstChild, jQueryLike, 'nextSibling');
+        return _siblingAll(node, (node.parentNode || _objectEmpty).firstChild, jQueryLike, 'nextSibling');
     }
 
     /**
@@ -477,18 +475,21 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     /**
      * Get the first sibling of a node based on the type e.g. next/previous
      *
-     * @param {Node} node Node to get the sibling type of
+     * @param {Node} node Node that was initially provided
+     * @param {Node} startNode Starting node to get the sibling type of
      * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
      * @param {string} type Sibling type e.g. nextSibling or previousSibling
      * @return {Node} A sibling node; otherwise, null on error
      */
-    function _node(node, jQueryLike, type) {
+    function _sibling(node, startNode, jQueryLike, type) {
         // Enforce the default value
         var allNodes = jQueryLike !== true;
 
-        var siblingNode = node[type];
+        var siblingNode = startNode[type];
         while (!allNodes && siblingNode && siblingNode.nodeType !== _nodeTypeElementNode) {
-            siblingNode = siblingNode[type];
+            if (node !== siblingNode) {
+                siblingNode = siblingNode[type];
+            }
         }
 
         return siblingNode;
@@ -497,19 +498,20 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     /**
      * Get all the siblings of a node based on the type e.g. next/previous
      *
-     * @param {Node} node Node to get all the sibling types of
+     * @param {Node} node Node that was initially provided
+     * @param {Node} startNode Starting node to get the sibling types of
      * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
      * @param {string} type Sibling type e.g. nextSibling or previousSibling
      * @return {array} An array of sibling nodes based on the type; otherwise, an empty array on error
      */
-    function _nodeAll(node, jQueryLike, type) {
+    function _siblingAll(node, startNode, jQueryLike, type) {
         // Enforce the default value
         var allNodes = jQueryLike !== true;
         var siblingNodes = [];
 
-        var siblingNode = node[type];
+        var siblingNode = startNode[type];
         while (siblingNode) {
-            if (allNodes || siblingNode.nodeType === _nodeTypeElementNode) {
+            if (node !== siblingNode && (allNodes || siblingNode.nodeType === _nodeTypeElementNode)) {
                 siblingNodes.push(siblingNode);
             }
 
