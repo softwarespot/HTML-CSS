@@ -1,12 +1,15 @@
-var domElements = (function domElementsModule(document, Array, Element) {
+var domElements = (function domElementsModule(document, Array, Element, Node, Object, Window) {
     // Fields
+
+    // Parsing the native toString() return value e.g. [object Object]
+    var _reTypeOf = /(?:^\[object\s(.*?)\]$)/;
 
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
     var _nodeTypeFragmentNode = Node.DOCUMENT_FRAGMENT_NODE;
     var _nodeTypeElementNode = Node.ELEMENT_NODE;
 
-    // Polyfills
+    // Polyfills and caching
 
     var _arrayPrototype = Array.prototype;
     var _arrayFilter = _arrayPrototype.filter;
@@ -31,7 +34,9 @@ var domElements = (function domElementsModule(document, Array, Element) {
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
     var _elementMatches =
         _elementPrototype.matches ||
-        _elementPrototype.mozMatchesSelector ||
+        _elementPrototy
+
+    pe.mozMatchesSelector ||
         _elementPrototype.msMatchesSelector ||
         _elementPrototype.webkitMatchesSelector ||
         function elementMatches(node, selector) {
@@ -45,10 +50,12 @@ var domElements = (function domElementsModule(document, Array, Element) {
             return !!nodes[index];
         };
 
+    var _objectToString = Object.prototype.toString;
+
     // Public API
     return {
-        $: dollar,
-        $$: dollarDollar,
+        $: $,
+        $$: $$,
         after: after,
         append: append,
         around: wrap,
@@ -68,10 +75,45 @@ var domElements = (function domElementsModule(document, Array, Element) {
         replace: replace,
         siblings: siblings,
         start: prepend,
-        toArray: _arrayFrom,
         wrap: wrap,
         unwrap: unwrap,
+
+        // Helper functions not related to the DOM
+        toArray: _arrayFrom,
+        type: type,
     };
+
+    /**
+     * Wrapper for *.querySelector
+     * Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.js
+     *
+     * @param {string} selector Selector string
+     * @param {object|null|undefined} context Node to query on. Default is document if falsy
+     * @return {Node|null} A node; otherwise, null on error
+     */
+    function $(selector, context) {
+        return type(selector) === 'string' ?
+            (context || document).querySelector(selector) :
+            (selector || null);
+    }
+
+    /**
+     * Wrapper for *.querySelectorAll
+     * Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.js
+     *
+     * @param {string} selector Selector string
+     * @param {object|null|undefined} context Node to query on. Default is document if falsy
+     * @return {array} An array of nodes; otherwise, an empty array on error
+     */
+    function $$(selector, context) {
+        if (selector instanceof Node || selector instanceof Window) {
+            return [selector];
+        }
+
+        return type(selector) === 'string' ?
+            _arrayFrom((context || document).querySelectorAll(selector)) :
+            (selector || []);
+    }
 
     /**
      * Insert a node after another node
@@ -151,28 +193,6 @@ var domElements = (function domElementsModule(document, Array, Element) {
         }
 
         return _arrayFrom(el.childNodes);
-    }
-
-    /**
-     * Wrapper for *.querySelector
-     *
-     * @param {string} selector Selector string
-     * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
-     * @return {Node|null} A node; otherwise, null on error
-     */
-    function dollar(selector, context) {
-        return (context || document).querySelector(selector);
-    }
-
-    /**
-     * Wrapper for *.querySelectorAll
-     *
-     * @param {string} selector Selector string
-     * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
-     * @return {array} An array of nodes; otherwise, an empty array on error
-     */
-    function dollarDollar(selector, context) {
-        return _arrayFrom((context || document).querySelectorAll(selector));
     }
 
     /**
@@ -282,24 +302,45 @@ var domElements = (function domElementsModule(document, Array, Element) {
      * @return {array} Array of nodes/elements; otherwise, an empty array on error
      */
     function siblings(node, elementsOnly) {
-        var siblings = [];
+        // Could use node.parentNode.children if other node types are not required
+        var siblingNodes = [];
 
         var sibling = node.parentNode;
         if (!sibling) {
-            return siblings;
+            return siblingNodes;
         }
 
         sibling = sibling.firstChild;
         while (sibling) {
             // Enforce the default value
             if (node !== sibling && (elementsOnly !== true || sibling.nodeType === _nodeTypeElementNode)) {
-                siblings.push(sibling);
+                siblingNodes.push(sibling);
             }
 
             sibling = sibling.nextSibling;
         }
 
-        return siblings;
+        return siblingNodes;
+    }
+
+    /**
+     * An advanced variation of typeOf, that returns the classname instead of the primitive datatype e.g. 'array', 'date', 'null', 'regexp', string'
+     * Idea by JavaScript Weblog, URL: https://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
+     *
+     * @param {mixed} value Variable to check
+     * @return {string} Classname of the value
+     */
+    function type(value) {
+        var tag = _objectToString
+            .call(value)
+            .replace(_reTypeOf, '$1')
+            .toLowerCase();
+        if (tag === 'number' && value !== value) { // eslint-disable-line
+            // Override number if a NaN
+            tag = 'nan';
+        }
+
+        return tag;
     }
 
     /**
@@ -340,6 +381,4 @@ var domElements = (function domElementsModule(document, Array, Element) {
 
         parentNode.removeChild(node);
     }
-
-    // Helper functions
-}(window.document, window.Array, window.Element));
+}(window.document, window.Array, window.Element, window.Node, window.Object, window.Window));
