@@ -41,8 +41,7 @@ var domElements = (function domElementsModule() {
         around: wrap,
         before: before,
         closest: closest,
-
-        // contents: contents,
+        contents: contents,
         empty: empty,
         getComputedStyles: getComputedStyles,
         inside: append,
@@ -107,9 +106,15 @@ var domElements = (function domElementsModule() {
         return _elementClosest.call(el, selector);
     }
 
-    // function contents(el) {
-    //     return el.contentDocument || el.childNodes;
-    // }
+    /**
+     * Get the contents of a node
+     *
+     * @param {Node} el Node to get the contents of
+     * @return {NodeList} NodeList
+     */
+    function contents(el) {
+        return el.contentDocument || el.childNodes;
+    }
 
     /**
      * Empty the contents of a node
