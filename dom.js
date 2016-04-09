@@ -59,6 +59,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         around: wrap,
         before: before,
         children: children,
+        clone: clone,
         closest: closest,
         contents: contents,
         empty: empty,
@@ -78,6 +79,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         remove: remove,
         renew: replace,
         replace: replace,
+        replaceWith: replace,
         siblings: siblings,
         start: prepend,
         styles: styles,
@@ -175,6 +177,20 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         return _arrayFilter.call(nodes, function filter(node) {
             return allNodes || node.nodeType === _nodeTypeElementNode;
         });
+    }
+
+    /**
+     * Clone a node
+     *
+     * @param {Node} node Node to clone
+     * @param {boolean} deep Set as true to create a deep copy with all inner nodes. Default is false
+     * @return {Node} Cloned node
+     */
+    function clone(node, deep) {
+        // Enforce the default value
+        deep = deep === true;
+
+        return node.cloneNode(deep);
     }
 
     /**
