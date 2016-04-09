@@ -52,8 +52,8 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
 
     // Public API
     return {
-        $: $,
         $$: $$,
+        $: $,
         after: after,
         append: append,
         around: wrap,
@@ -63,20 +63,24 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         contents: contents,
         empty: empty,
         inside: append,
+        is: matches,
         matches: matches,
+        next: next,
         parent: parent,
         parents: parents,
         prepend: prepend,
+        prev: previous,
+        previous: previous,
         remove: remove,
         renew: replace,
         replace: replace,
         siblings: siblings,
         start: prepend,
         styles: styles,
-        wrap: wrap,
         unwrap: unwrap,
+        wrap: wrap,
 
-        // Helper functions not related to the DOM
+        // Helper functions not related to DOM traversal or manipulation
         toArray: _arrayFrom,
         type: type,
     };
@@ -154,15 +158,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * Get the children of a node
      *
      * @param {Node} node Node to get the children of
-     * @param {boolean} elementsOnly Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
      * @return {array} Array of nodes/elements; otherwise, an empty array on error
      */
-    function children(node, elementsOnly) {
+    function children(node, jQueryLike) {
         var nodes = node.childNodes;
 
+        // Enforce the default value
+        var allNodes = jQueryLike !== true;
+
         return _arrayFilter.call(nodes, function filter(node) {
-            // Enforce the default value
-            return elementsOnly !== true || node.nodeType === _nodeTypeElementNode;
+            return allNodes || node.nodeType === _nodeTypeElementNode;
         });
     }
 
@@ -217,6 +223,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     }
 
     /**
+     * Get the next sibling of a node
+     *
+     * @param {Node} node Node to get the next sibling of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {Node} A node; otherwise, null on error
+     */
+    function next(node, jQueryLike) {
+        return _sibling(node, jQueryLike, 'nextSibling');
+    }
+
+    /**
      * Get the parent of a node
      *
      * @param {Node} node Node to get the parent of
@@ -258,6 +275,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     }
 
     /**
+     * Get the previous sibling of a node
+     *
+     * @param {Node} node Node to get the previous sibling of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {Node} A node; otherwise, null on error
+     */
+    function previous(node, jQueryLike) {
+        return _sibling(node, jQueryLike, 'previousSibling');
+    }
+
+    /**
      * Remove a node
      *
      * @param {Node} node Node to remove
@@ -286,10 +314,10 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * Get the siblings of a node
      *
      * @param {Node} node Node to get the siblings of
-     * @param {boolean} elementsOnly Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
      * @return {array} Array of nodes/elements; otherwise, an empty array on error
      */
-    function siblings(node, elementsOnly) {
+    function siblings(node, jQueryLike) {
         // Could use node.parentNode.children if other node types are not required
         var siblingNodes = [];
 
@@ -298,10 +326,12 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
             return siblingNodes;
         }
 
+        // Enforce the default value
+        var allNodes = jQueryLike !== true;
+
         sibling = sibling.firstChild;
         while (sibling) {
-            // Enforce the default value
-            if (node !== sibling && (elementsOnly !== true || sibling.nodeType === _nodeTypeElementNode)) {
+            if (node !== sibling && (allNodes || sibling.nodeType === _nodeTypeElementNode)) {
                 siblingNodes.push(sibling);
             }
 
@@ -378,5 +408,25 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         }
 
         parentNode.removeChild(node);
+    }
+
+     /**
+     * Get the type e.g. next/previous sibling of a node
+     *
+     * @param {Node} node Node to get the sibling type of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @param {string} type Sibling type e.g. nextSibling or previousSibling
+     * @return {Node} A node; otherwise, null on error
+     */
+    function _sibling(node, jQueryLike, type) {
+        // Enforce the default value
+        var allNodes = jQueryLike !== true;
+
+        var sibling = node[type];
+        while (!allNodes && sibling && sibling.nodeType !== _nodeTypeElementNode) {
+            sibling = sibling[type];
+        }
+
+        return sibling;
     }
 }(window.document, window.Array, window.Element, window.Node, window.Object, window.Window));
