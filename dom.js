@@ -66,11 +66,14 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         is: matches,
         matches: matches,
         next: next,
+        nextAll: nextAll,
         parent: parent,
         parents: parents,
         prepend: prepend,
         prev: previous,
         previous: previous,
+        prevAll: previousAll,
+        previousAll: previousAll,
         remove: remove,
         renew: replace,
         replace: replace,
@@ -227,10 +230,21 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      *
      * @param {Node} node Node to get the next sibling of
      * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
-     * @return {Node} A node; otherwise, null on error
+     * @return {Node} Next sibling nodes; otherwise, null on error
      */
     function next(node, jQueryLike) {
         return _sibling(node, jQueryLike, 'nextSibling');
+    }
+
+    /**
+     * Get the next siblings of a node
+     *
+     * @param {Node} node Node to get the next siblings of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {array} Array of next sibling nodes; otherwise, an empty array on error
+     */
+    function nextAll(node, jQueryLike) {
+        return _siblingAll(node, jQueryLike, 'nextSibling');
     }
 
     /**
@@ -279,10 +293,21 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      *
      * @param {Node} node Node to get the previous sibling of
      * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
-     * @return {Node} A node; otherwise, null on error
+     * @return {Node} Previous sibling nodes; otherwise, null on error
      */
     function previous(node, jQueryLike) {
         return _sibling(node, jQueryLike, 'previousSibling');
+    }
+
+    /**
+     * Get the previous siblings of a node
+     *
+     * @param {Node} node Node to get the previous siblings of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {array} Array of previous sibling nodes; otherwise, an empty array on error
+     */
+    function previousAll(node, jQueryLike) {
+        return _siblingAll(node, jQueryLike, 'previousSibling');
     }
 
     /**
@@ -321,21 +346,21 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         // Could use node.parentNode.children if other node types are not required
         var siblingNodes = [];
 
-        var sibling = node.parentNode;
-        if (!sibling) {
+        var siblingNode = node.parentNode;
+        if (!siblingNode) {
             return siblingNodes;
         }
 
         // Enforce the default value
         var allNodes = jQueryLike !== true;
 
-        sibling = sibling.firstChild;
-        while (sibling) {
-            if (node !== sibling && (allNodes || sibling.nodeType === _nodeTypeElementNode)) {
-                siblingNodes.push(sibling);
+        siblingNode = siblingNode.firstChild;
+        while (siblingNode) {
+            if (node !== siblingNode && (allNodes || siblingNode.nodeType === _nodeTypeElementNode)) {
+                siblingNodes.push(siblingNode);
             }
 
-            sibling = sibling.nextSibling;
+            siblingNode = siblingNode.nextSibling;
         }
 
         return siblingNodes;
@@ -410,13 +435,13 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         parentNode.removeChild(node);
     }
 
-     /**
-     * Get the type e.g. next/previous sibling of a node
+    /**
+     * Get the first sibling of a node based on a type e.g. next/previous
      *
      * @param {Node} node Node to get the sibling type of
      * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
      * @param {string} type Sibling type e.g. nextSibling or previousSibling
-     * @return {Node} A node; otherwise, null on error
+     * @return {Node} A sibling node; otherwise, null on error
      */
     function _sibling(node, jQueryLike, type) {
         // Enforce the default value
@@ -428,5 +453,30 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         }
 
         return sibling;
+    }
+
+    /**
+     * Get all the siblings of a node based on a type e.g. next/previous
+     *
+     * @param {Node} node Node to get all the sibling types of
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @param {string} type Sibling type e.g. nextSibling or previousSibling
+     * @return {array} An array of sibling nodes based on the type; otherwise, an empty array on error
+     */
+    function _siblingAll(node, jQueryLike, type) {
+        // Enforce the default value
+        var allNodes = jQueryLike !== true;
+        var siblingNodes = [];
+
+        var siblingNode = node[type];
+        while (siblingNode) {
+            if (allNodes || siblingNode.nodeType === _nodeTypeElementNode) {
+                siblingNodes.push(siblingNode);
+            }
+
+            siblingNode = siblingNode[type];
+        }
+
+        return siblingNodes;
     }
 }(window.document, window.Array, window.Element, window.Node, window.Object, window.Window));
