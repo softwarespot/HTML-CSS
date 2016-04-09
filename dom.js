@@ -1,15 +1,24 @@
-var domElements = (function domElementsModule() {
+var domElements = (function domElementsModule(Array, Element) {
     // Fields
 
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
     var _nodeTypeFragmentNode = Node.DOCUMENT_FRAGMENT_NODE;
+    var _nodeTypeElementNode = Node.ELEMENT_NODE;
 
     // Polyfills
 
+    var _arrayPrototype = Array.prototype;
+    var _arrayFilter = _arrayPrototype.filter;
+    var _arrayFrom = Array.from || function arrayFrom(arrayLike) {
+        return _arrayPrototype.slice.call(arrayLike);
+    };
+
+    var _elementPrototype = Element.prototype;
+
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
     var _elementClosest =
-        Element.prototype.closest || function elementClosest(el, selector) {
+        _elementPrototype.closest || function elementClosest(el, selector) {
             while (el && el.nodeType !== _nodeTypeFragmentNode && !matches(el, selector)) {
                 el = el.parentNode;
             }
@@ -19,10 +28,10 @@ var domElements = (function domElementsModule() {
 
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
     var _elementMatches =
-        Element.prototype.matches ||
-        Element.prototype.mozMatchesSelector ||
-        Element.prototype.msMatchesSelector ||
-        Element.prototype.webkitMatchesSelector ||
+        _elementPrototype.matches ||
+        _elementPrototype.mozMatchesSelector ||
+        _elementPrototype.msMatchesSelector ||
+        _elementPrototype.webkitMatchesSelector ||
         function elementMatches(el, selector) {
             var els = el.ownerDocument.querySelectorAll(selector);
 
@@ -31,7 +40,7 @@ var domElements = (function domElementsModule() {
                 index++;
             }
 
-            return !_isNil(els[index]);
+            return !!els[index];
         };
 
     // Public API
@@ -40,6 +49,7 @@ var domElements = (function domElementsModule() {
         append: append,
         around: wrap,
         before: before,
+        children: children,
         closest: closest,
         contents: contents,
         empty: empty,
@@ -52,7 +62,9 @@ var domElements = (function domElementsModule() {
         remove: remove,
         renew: replace,
         replace: replace,
+        siblings: siblings,
         start: prepend,
+        toArray: _arrayFrom,
         wrap: wrap,
         unwrap: unwrap,
     };
@@ -95,6 +107,22 @@ var domElements = (function domElementsModule() {
     }
 
     /**
+     * Get the children of a node
+     *
+     * @param {Node} node Node to get the children of
+     * @param {boolean} elementsOnly Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {array} Array of nodes/elements; otherwise, an empty array on error
+     */
+    function children(node, elementsOnly) {
+        var nodes = node.childNodes;
+
+        return _arrayFilter.call(nodes, function filter(node) {
+            // Enforce the default value
+            return elementsOnly !== true || node.nodeType === _nodeTypeElementNode;
+        });
+    }
+
+    /**
      * Get the closest element node using a selector string
      * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
      *
@@ -109,11 +137,16 @@ var domElements = (function domElementsModule() {
     /**
      * Get the contents of a node
      *
-     * @param {Node} node Node to get the contents of
-     * @return {NodeList} NodeList
+     * @param {HTMLIFrameElement|Node} el HTMLIFrameElement/Node to get the contents of
+     * @return {Document|array} A Document if an iFrame/an array of nodes; otherwise, an empty array on error
      */
-    function contents(node) {
-        return node.contentDocument || node.childNodes;
+    function contents(el) {
+        var contents = el.documentContent;
+        if (contents) {
+            return contents;
+        }
+
+        return _arrayFrom(el.childNodes);
     }
 
     /**
@@ -216,6 +249,33 @@ var domElements = (function domElementsModule() {
     }
 
     /**
+     * Get the siblings of a node
+     *
+     * @param {Node} node Node to get the siblings of
+     * @param {boolean} elementsOnly Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {array} Array of nodes/elements; otherwise, an empty array on error
+     */
+    function siblings(node, elementsOnly) {
+        var siblings = [];
+
+        var sibling = node.parentNode;
+        if (!sibling) {
+            return siblings;
+        }
+
+        sibling = sibling.firstChild;
+        while (sibling) {
+            if (node !== sibling && (elementsOnly !== true || sibling.nodeType === _nodeTypeElementNode)) {
+                siblings.push(sibling);
+            }
+
+            sibling = sibling.nextSibling;
+        }
+
+        return siblings;
+    }
+
+    /**
      * Wrap a node with another node
      *
      * @param {Node} node Node to wrap around
@@ -252,14 +312,4 @@ var domElements = (function domElementsModule() {
     }
 
     // Helper functions
-
-    /**
-     * Check if a variable is null or undefined
-     *
-     * @param {mixed} value Value to check
-     * @returns {boolean} True, the value is null or undefined; otherwise, false
-     */
-    function _isNil(value) {
-        return value === null || value === undefined;
-    }
-}());
+}(window.Array, window.Element));
