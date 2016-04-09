@@ -62,7 +62,6 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         closest: closest,
         contents: contents,
         empty: empty,
-        getComputedStyles: getComputedStyles,
         inside: append,
         matches: matches,
         parent: parent,
@@ -73,6 +72,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         replace: replace,
         siblings: siblings,
         start: prepend,
+        styles: styles,
         wrap: wrap,
         unwrap: unwrap,
 
@@ -205,16 +205,6 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     }
 
     /**
-     * Get the computed styles of a node
-     *
-     * @param {Node} node Node to retrieve the styles of
-     * @return {object} Object of styles
-     */
-    function getComputedStyles(node) {
-        return node.ownerDocument.defaultView.getComputedStyle(node, null);
-    }
-
-    /**
      * Check if an element node matches a selector string
      * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
      *
@@ -319,6 +309,16 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         }
 
         return siblingNodes;
+    }
+
+    /**
+     * Get the computed styles of a node
+     *
+     * @param {Node} node Node to retrieve the styles of
+     * @return {object} Object of styles
+     */
+    function styles(node) {
+        return node.ownerDocument.defaultView.getComputedStyle(node, null);
     }
 
     /**
