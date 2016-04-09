@@ -135,8 +135,12 @@
      * @return {undefined}
      */
     function replace(el, elReplacement) {
-        before(el, elReplacement);
-        remove(el);
+        if (!_isNil(el.parentNode)) {
+            el.parentNode.replaceChild(elReplacement, el);
+        }
+
+        // before(el, elReplacement);
+        // remove(el);
     }
 
     /**
