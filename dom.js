@@ -1,6 +1,5 @@
-var dom = (function domModule(Object) {
+var domElements = (function domElementsModule() {
     // Fields
-    var _nativeObjectToString = Object.prototype.toString;
 
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
@@ -35,16 +34,6 @@ var dom = (function domModule(Object) {
             return !_isNil(els[index]);
         };
 
-    // URL: https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
-    var _elementRemove =
-        Element.prototype.remove ||
-        function elementRemove(el) {
-            if (el.parentNode) {
-                el.parentNode.removeChild(el);
-            }
-        };
-
-
     // Public API
     return {
         after: after,
@@ -52,6 +41,8 @@ var dom = (function domModule(Object) {
         around: wrap,
         before: before,
         closest: closest,
+
+        // contents: contents,
         empty: empty,
         getComputedStyles: getComputedStyles,
         inside: append,
@@ -64,14 +55,14 @@ var dom = (function domModule(Object) {
         replace: replace,
         start: prepend,
         wrap: wrap,
-        unwrap: unwrap
+        unwrap: unwrap,
     };
 
     /**
-     * Insert an element after an element node
+     * Insert a node after another node
      *
-     * @param {HTMLElement} el Element node to insert after
-     * @param {HTMLElement} elAfter Element node to insert
+     * @param {Node} el Node to insert after
+     * @param {Node} elAfter Node to insert
      * @return {undefined}
      */
     function after(el, elAfter) {
@@ -81,10 +72,10 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Insert an element after an element node's content
+     * Insert a node after an node's content
      *
-     * @param {HTMLElement} el Element node to insert after
-     * @param {HTMLElement} elAfter Element node to insert
+     * @param {Node} el Node to append after
+     * @param {Node} elAfter Node to append
      * @return {undefined}
      */
     function append(el, elAfter) {
@@ -92,10 +83,10 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Insert an element before an element node
+     * Insert a node before another node
      *
-     * @param {HTMLElement} el Element node to insert before
-     * @param {HTMLElement} elAfter Element node to insert
+     * @param {Node} el Node to insert before
+     * @param {Node} elAfter Node to insert
      * @return {undefined}
      */
     function before(el, elBefore) {
@@ -108,19 +99,23 @@ var dom = (function domModule(Object) {
      * Get the closest element node using a selector string
      * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
      *
-     * @param {HTMLElement} el Element node to start from
+     * @param {Element} el Element node to start searching from
      * @param {string} selector Selector string
-     * @return {HTMLElement|null} Closest element node; otherwise, null on error
+     * @return {Element|null} Closest element node; otherwise, null on error
      */
     function closest(el, selector) {
         return _elementClosest.call(el, selector);
     }
 
+    // function contents(el) {
+    //     return el.contentDocument || el.childNodes;
+    // }
+
     /**
-     * Empty the contents of an element node
+     * Empty the contents of a node
      * Idea by dom.js, URL: https://github.com/component/dom/blob/master/dom.js#L2789
      *
-     * @param {HTMLElement} elAfter Element node to empty
+     * @param {Node} el Node to empty
      * @return {undefined}
      */
     function empty(el) {
@@ -128,32 +123,32 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Get the computed styles of an element
+     * Get the computed styles of a node
      *
-     * @param {HTMLElement} el Element node to get the styles of
-     * @return {undefined}
+     * @param {Node} el Node to retrieve the styles of
+     * @return {object} Object of styles
      */
     function getComputedStyles(el) {
-        el.ownerDocument.defaultView.getComputedStyle(el, null);
+        return el.ownerDocument.defaultView.getComputedStyle(el, null);
     }
 
     /**
      * Check if an element node matches a selector string
      * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
      *
-     * @param {HTMLElement} el Element node to match on
+     * @param {Element} el Element node to match on
      * @param {string} selector Selector string
-     * @return {HTMLElement|null} True, the element node matches the selector; otherwise, false
+     * @return {Element|null} True, the element node matches the selector string; otherwise, false
      */
     function matches(el, selector) {
         return _elementMatches.call(el, selector);
     }
 
     /**
-     * Get the parent of an element node
+     * Get the parent of a node
      *
-     * @param {HTMLElement} el Element node to get the parent of
-     * @return {HTMLElement|null} Element node; otherwise, null
+     * @param {Node} el Node to get the parent of
+     * @return {Node|null} Node; otherwise, null
      */
     function parent(el) {
         var parent = el.parentNode;
@@ -162,10 +157,10 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Get the parents of an element node
+     * Get the parents of a node
      *
-     * @param {HTMLElement} el Element node to get the parents of
-     * @return {array} An array of element nodes; otherwise, an empty array
+     * @param {Node} el Node to get the parents of
+     * @return {array} An array of nodes; otherwise, an empty array
      */
     function parents(el) {
         var parent = el.parentNode;
@@ -180,10 +175,10 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Insert an element before an element node's content
+     * Insert a node before an node's content
      *
-     * @param {HTMLElement} el Element node to insert before
-     * @param {HTMLElement} elAfter Element node to insert
+     * @param {Node} el Node to prepend before
+     * @param {Node} elAfter Node to prepend
      * @return {undefined}
      */
     function prepend(el, elBefore) {
@@ -191,36 +186,35 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Remove an element
+     * Remove a node
      *
-     * @param {HTMLElement} el Element node to remove
+     * @param {Node} el Node to remove
      * @return {undefined}
      */
     function remove(el) {
-        return _elementRemove.call(el);
+        if (el.parentNode) {
+            el.parentNode.removeChild(el);
+        }
     }
 
     /**
-     * Replace an element node with another element node
+     * Replace a node with another node
      *
-     * @param {HTMLElement} el Element node to replace
-     * @param {HTMLElement} elReplacement Element node to replace with
+     * @param {Node} el Node to replace
+     * @param {Node} elReplacement Node to replace with
      * @return {undefined}
      */
     function replace(el, elReplacement) {
         if (el.parentNode) {
             el.parentNode.replaceChild(elReplacement, el);
         }
-
-        // before(el, elReplacement);
-        // remove(el);
     }
 
     /**
-     * Wrap an element node with another element node
+     * Wrap a node with another node
      *
-     * @param {HTMLElement} el Element node to wrap around
-     * @param {HTMLElement} elWrap Element node to wrap with
+     * @param {Node} el Node to wrap around
+     * @param {Node} elWrap Node to wrap with
      * @return {undefined}
      */
     function wrap(el, elWrap) {
@@ -236,10 +230,10 @@ var dom = (function domModule(Object) {
     }
 
     /**
-     * Unwrap an element node
+     * Unwrap a node
      * Idea by plainjs.com, URL: https://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/
      *
-     * @param {HTMLElement} el Element node to unwrap
+     * @param {Node} el Node to unwrap
      * @return {undefined}
      */
     function unwrap(el) {
@@ -263,4 +257,4 @@ var dom = (function domModule(Object) {
     function _isNil(value) {
         return value === null || value === undefined;
     }
-}(window.Object));
+}());
