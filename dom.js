@@ -60,37 +60,37 @@ var domElements = (function domElementsModule() {
     /**
      * Insert a node after another node
      *
-     * @param {Node} el Node to insert after
-     * @param {Node} elAfter Node to insert
+     * @param {Node} node Node to insert after
+     * @param {Node} nodeAfter Node to insert
      * @return {undefined}
      */
-    function after(el, elAfter) {
-        if (el.parentNode) {
-            el.parentNode.insertBefore(elAfter, el.nextSibling);
+    function after(node, nodeAfter) {
+        if (node.parentNode) {
+            node.parentNode.insertBefore(nodeAfter, node.nextSibling);
         }
     }
 
     /**
      * Insert a node after an node's content
      *
-     * @param {Node} el Node to append after
-     * @param {Node} elAfter Node to append
+     * @param {Node} node Node to append after
+     * @param {Node} nodeAfter Node to append
      * @return {undefined}
      */
-    function append(el, elAfter) {
-        el.appendChild(elAfter);
+    function append(node, nodeAfter) {
+        node.appendChild(nodeAfter);
     }
 
     /**
      * Insert a node before another node
      *
-     * @param {Node} el Node to insert before
-     * @param {Node} elAfter Node to insert
+     * @param {Node} node Node to insert before
+     * @param {Node} nodeAfter Node to insert
      * @return {undefined}
      */
-    function before(el, elBefore) {
-        if (el.parentNode) {
-            el.parentNode.insertBefore(elBefore, el);
+    function before(node, nodeBefore) {
+        if (node.parentNode) {
+            node.parentNode.insertBefore(nodeBefore, node);
         }
     }
 
@@ -109,32 +109,32 @@ var domElements = (function domElementsModule() {
     /**
      * Get the contents of a node
      *
-     * @param {Node} el Node to get the contents of
+     * @param {Node} node Node to get the contents of
      * @return {NodeList} NodeList
      */
-    function contents(el) {
-        return el.contentDocument || el.childNodes;
+    function contents(node) {
+        return node.contentDocument || node.childNodes;
     }
 
     /**
      * Empty the contents of a node
      * Idea by dom.js, URL: https://github.com/component/dom/blob/master/dom.js#L2789
      *
-     * @param {Node} el Node to empty
+     * @param {Node} node Node to empty
      * @return {undefined}
      */
-    function empty(el) {
-        el.textContent = '';
+    function empty(node) {
+        node.textContent = '';
     }
 
     /**
      * Get the computed styles of a node
      *
-     * @param {Node} el Node to retrieve the styles of
+     * @param {Node} node Node to retrieve the styles of
      * @return {object} Object of styles
      */
-    function getComputedStyles(el) {
-        return el.ownerDocument.defaultView.getComputedStyle(el, null);
+    function getComputedStyles(node) {
+        return node.ownerDocument.defaultView.getComputedStyle(node, null);
     }
 
     /**
@@ -152,103 +152,103 @@ var domElements = (function domElementsModule() {
     /**
      * Get the parent of a node
      *
-     * @param {Node} el Node to get the parent of
+     * @param {Node} node Node to get the parent of
      * @return {Node|null} Node; otherwise, null
      */
-    function parent(el) {
-        var parent = el.parentNode;
+    function parent(node) {
+        var parentNode = node.parentNode;
 
-        return parent && parent.nodeType !== _nodeTypeFragmentNode ? parent : null;
+        return parentNode && parentNode.nodeType !== _nodeTypeFragmentNode ? parentNode : null;
     }
 
     /**
      * Get the parents of a node
      *
-     * @param {Node} el Node to get the parents of
+     * @param {Node} node Node to get the parents of
      * @return {array} An array of nodes; otherwise, an empty array
      */
-    function parents(el) {
-        var parent = el.parentNode;
+    function parents(node) {
+        var parentNode = node.parentNode;
 
-        var parents = [];
-        while (parent && parent.nodeType !== _nodeTypeDocumentNode) {
-            parents.push(parent);
-            parent = parent.parentNode;
+        var parentNodes = [];
+        while (parentNode && parentNode.nodeType !== _nodeTypeDocumentNode) {
+            parentNodes.push(parentNode);
+            parentNode = parentNode.parentNode;
         }
 
-        return parents;
+        return parentNodes;
     }
 
     /**
      * Insert a node before an node's content
      *
-     * @param {Node} el Node to prepend before
-     * @param {Node} elAfter Node to prepend
+     * @param {Node} node Node to prepend before
+     * @param {Node} nodeAfter Node to prepend
      * @return {undefined}
      */
-    function prepend(el, elBefore) {
-        el.insertBefore(elBefore, el.firstChild);
+    function prepend(node, nodeBefore) {
+        node.insertBefore(nodeBefore, node.firstChild);
     }
 
     /**
      * Remove a node
      *
-     * @param {Node} el Node to remove
+     * @param {Node} node Node to remove
      * @return {undefined}
      */
-    function remove(el) {
-        if (el.parentNode) {
-            el.parentNode.removeChild(el);
+    function remove(node) {
+        if (node.parentNode) {
+            node.parentNode.removeChild(node);
         }
     }
 
     /**
      * Replace a node with another node
      *
-     * @param {Node} el Node to replace
-     * @param {Node} elReplacement Node to replace with
+     * @param {Node} node Node to replace
+     * @param {Node} nodeReplacement Node to replace with
      * @return {undefined}
      */
-    function replace(el, elReplacement) {
-        if (el.parentNode) {
-            el.parentNode.replaceChild(elReplacement, el);
+    function replace(node, nodeReplacement) {
+        if (node.parentNode) {
+            node.parentNode.replaceChild(nodeReplacement, node);
         }
     }
 
     /**
      * Wrap a node with another node
      *
-     * @param {Node} el Node to wrap around
-     * @param {Node} elWrap Node to wrap with
+     * @param {Node} node Node to wrap around
+     * @param {Node} nodeWrap Node to wrap with
      * @return {undefined}
      */
-    function wrap(el, elWrap) {
-        before(el, elWrap);
+    function wrap(node, nodeWrap) {
+        before(node, nodeWrap);
 
         // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
         var reIsTemplate = /(?:^template$)/i;
-        if (reIsTemplate.test(elWrap.nodeName) && elWrap.content) {
-            elWrap = elWrap.content;
+        if (reIsTemplate.test(nodeWrap.nodeName) && nodeWrap.content) {
+            nodeWrap = nodeWrap.content;
         }
 
-        elWrap.appendChild(el);
+        nodeWrap.appendChild(node);
     }
 
     /**
      * Unwrap a node
      * Idea by plainjs.com, URL: https://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/
      *
-     * @param {Node} el Node to unwrap
+     * @param {Node} node Node to unwrap
      * @return {undefined}
      */
-    function unwrap(el) {
-        var parent = el.parentNode;
+    function unwrap(node) {
+        var parentNode = node.parentNode;
 
-        while (el.firstChild) {
-            parent.insertBefore(el.firstChild, el);
+        while (node.firstChild) {
+            parentNode.insertBefore(node.firstChild, node);
         }
 
-        parent.removeChild(el);
+        parentNode.removeChild(node);
     }
 
     // Helper functions
