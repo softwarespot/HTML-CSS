@@ -1,4 +1,4 @@
-var domElements = (function domElementsModule(Array, Element) {
+var domElements = (function domElementsModule(document, Array, Element) {
     // Fields
 
     // Node types
@@ -46,6 +46,8 @@ var domElements = (function domElementsModule(Array, Element) {
 
     // Public API
     return {
+        $: dollar,
+        $$: dollarDollar,
         after: after,
         append: append,
         around: wrap,
@@ -148,6 +150,28 @@ var domElements = (function domElementsModule(Array, Element) {
         }
 
         return _arrayFrom(el.childNodes);
+    }
+
+    /**
+     * Wrapper for *.querySelector
+     *
+     * @param {string} selector Selector string
+     * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
+     * @return {Node|null} See documentation for *.querySelector
+     */
+    function dollar(selector, context) {
+        return (context || document).querySelector(selector);
+    }
+
+    /**
+     * Wrapper for *.querySelectorAll
+     *
+     * @param {string} selector Selector string
+     * @param {object|null|undefined} context Node to query on. Default is document if null or undefined
+     * @return {Node|null} See documentation for *.querySelectorAll
+     */
+    function dollarDollar(selector, context) {
+        return _arrayFrom((context || document).querySelectorAll(selector));
     }
 
     /**
@@ -305,6 +329,9 @@ var domElements = (function domElementsModule(Array, Element) {
      */
     function unwrap(node) {
         var parentNode = node.parentNode;
+        if (!parentNode) {
+            return;
+        }
 
         while (node.firstChild) {
             parentNode.insertBefore(node.firstChild, node);
@@ -314,4 +341,4 @@ var domElements = (function domElementsModule(Array, Element) {
     }
 
     // Helper functions
-}(window.Array, window.Element));
+}(window.document, window.Array, window.Element));
