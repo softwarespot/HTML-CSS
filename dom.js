@@ -1,6 +1,49 @@
-(function domModule(Object) {
+var dom = (function domModule(Object) {
     // Fields
     var _nativeObjectToString = Object.prototype.toString;
+
+    // Node types
+    var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
+    var _nodeTypeFragmentNode = Node.DOCUMENT_FRAGMENT_NODE;
+
+    // Polyfills
+
+    // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+    var _elementClosest =
+        Element.prototype.closest || function elementClosest(el, selector) {
+            while (el && el.nodeType !== _nodeTypeFragmentNode && !matches(el, selector)) {
+                el = el.parentNode;
+            }
+
+            return el || null;
+        };
+
+    // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+    var _elementMatches =
+        Element.prototype.matches ||
+        Element.prototype.mozMatchesSelector ||
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector ||
+        function elementMatches(el, selector) {
+            var els = el.ownerDocument.querySelectorAll(selector);
+
+            var index = 0;
+            while (els[index] && el !== els[index]) {
+                index++;
+            }
+
+            return !_isNil(els[index]);
+        };
+
+    // URL: https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
+    var _elementRemove =
+        Element.prototype.remove ||
+        function elementRemove(el) {
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        };
+
 
     // Public API
     return {
@@ -8,10 +51,13 @@
         append: append,
         around: wrap,
         before: before,
+        closest: closest,
         empty: empty,
         getComputedStyles: getComputedStyles,
         inside: append,
+        matches: matches,
         parent: parent,
+        parents: parents,
         prepend: prepend,
         remove: remove,
         renew: replace,
@@ -29,7 +75,7 @@
      * @return {undefined}
      */
     function after(el, elAfter) {
-        if (!_isNil(el.parentNode)) {
+        if (el.parentNode) {
             el.parentNode.insertBefore(elAfter, el.nextSibling);
         }
     }
@@ -53,14 +99,22 @@
      * @return {undefined}
      */
     function before(el, elBefore) {
-        if (!_isNil(el.parentNode)) {
+        if (el.parentNode) {
             el.parentNode.insertBefore(elBefore, el);
         }
     }
 
-    // Idea URL: https://github.com/jonathantneal/closest/blob/master/closest.js
-    // function closest() {
-    // }
+    /**
+     * Get the closest element node using a selector string
+     * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
+     *
+     * @param {HTMLElement} el Element node to start from
+     * @param {string} selector Selector string
+     * @return {HTMLElement|null} Closest element node; otherwise, null on error
+     */
+    function closest(el, selector) {
+        return _elementClosest.call(el, selector);
+    }
 
     /**
      * Empty the contents of an element node
@@ -83,9 +137,17 @@
         el.ownerDocument.defaultView.getComputedStyle(el, null);
     }
 
-    // Idea URL: https://github.com/jonathantneal/closest/blob/master/closest.js
-    // function matches() {
-    // }
+    /**
+     * Check if an element node matches a selector string
+     * Idea by jonathantneal, URL: https://github.com/jonathantneal/closest/blob/master/closest.js
+     *
+     * @param {HTMLElement} el Element node to match on
+     * @param {string} selector Selector string
+     * @return {HTMLElement|null} True, the element node matches the selector; otherwise, false
+     */
+    function matches(el, selector) {
+        return _elementMatches.call(el, selector);
+    }
 
     /**
      * Get the parent of an element node
@@ -95,11 +157,26 @@
      */
     function parent(el) {
         var parent = el.parentNode;
-        if (_isNil(parent) || parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-            return null;
+
+        return parent && parent.nodeType !== _nodeTypeFragmentNode ? parent : null;
+    }
+
+    /**
+     * Get the parents of an element node
+     *
+     * @param {HTMLElement} el Element node to get the parents of
+     * @return {array} An array of element nodes; otherwise, an empty array
+     */
+    function parents(el) {
+        var parent = el.parentNode;
+
+        var parents = [];
+        while (parent && parent.nodeType !== _nodeTypeDocumentNode) {
+            parents.push(parent);
+            parent = parent.parentNode;
         }
 
-        return parent;
+        return parents;
     }
 
     /**
@@ -120,11 +197,7 @@
      * @return {undefined}
      */
     function remove(el) {
-        if (_isFunction(el.remove)) {
-            el.remove();
-        } else if (!_isNil(el.parentNode)) {
-            el.parentNode.removeChild(el);
-        }
+        return _elementRemove.call(el);
     }
 
     /**
@@ -135,7 +208,7 @@
      * @return {undefined}
      */
     function replace(el, elReplacement) {
-        if (!_isNil(el.parentNode)) {
+        if (el.parentNode) {
             el.parentNode.replaceChild(elReplacement, el);
         }
 
@@ -155,7 +228,7 @@
 
         // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
         var reIsTemplate = /(?:^template$)/i;
-        if (reIsTemplate.test(elWrap.nodeName) && !_isNil(elWrap.content)) {
+        if (reIsTemplate.test(elWrap.nodeName) && elWrap.content) {
             elWrap = elWrap.content;
         }
 
@@ -172,7 +245,7 @@
     function unwrap(el) {
         var parent = el.parentNode;
 
-        while (!_isNil(el.firstChild)) {
+        while (el.firstChild) {
             parent.insertBefore(el.firstChild, el);
         }
 
@@ -180,17 +253,6 @@
     }
 
     // Helper functions
-
-    /**
-     * Check if a variable is a function datatype
-     *
-     * @param {mixed} value Value to check
-     * @returns {boolean} True, the value is a function datatype; otherwise, false
-     */
-    function _isFunction(value) {
-        var tag = _nativeObjectToString.call(value);
-        return tag === '[object Function]' || tag === '[object GeneratorFunction]';
-    }
 
     /**
      * Check if a variable is null or undefined
