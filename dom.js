@@ -10,8 +10,9 @@ var domElements = (function domElementsModule(Array, Element) {
 
     var _arrayPrototype = Array.prototype;
     var _arrayFilter = _arrayPrototype.filter;
+    var _arraySlice = _arrayPrototype.slice;
     var _arrayFrom = Array.from || function arrayFrom(arrayLike) {
-        return _arrayPrototype.slice.call(arrayLike);
+        return _arraySlice.call(arrayLike);
     };
 
     var _elementPrototype = Element.prototype;
@@ -265,6 +266,7 @@ var domElements = (function domElementsModule(Array, Element) {
 
         sibling = sibling.firstChild;
         while (sibling) {
+            // Enforce the default value
             if (node !== sibling && (elementsOnly !== true || sibling.nodeType === _nodeTypeElementNode)) {
                 siblings.push(sibling);
             }
