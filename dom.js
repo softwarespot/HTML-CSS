@@ -34,9 +34,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
     var _elementMatches =
         _elementPrototype.matches ||
-        _elementPrototy
-
-    pe.mozMatchesSelector ||
+        _elementPrototype.mozMatchesSelector ||
         _elementPrototype.msMatchesSelector ||
         _elementPrototype.webkitMatchesSelector ||
         function elementMatches(node, selector) {
