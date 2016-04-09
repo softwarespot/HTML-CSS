@@ -20,11 +20,12 @@ var domElements = (function domElementsModule(document, Array, Element) {
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
     var _elementClosest =
         _elementPrototype.closest || function elementClosest(el, selector) {
-            while (el && el.nodeType !== _nodeTypeFragmentNode && !matches(el, selector)) {
-                el = el.parentNode;
+            var parentNode = el;
+            while (parentNode && parentNode.nodeType !== _nodeTypeFragmentNode && !matches(parentNode, selector)) {
+                parentNode = parentNode.parentNode;
             }
 
-            return el || null;
+            return parentNode || null;
         };
 
     // URL: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
@@ -33,15 +34,15 @@ var domElements = (function domElementsModule(document, Array, Element) {
         _elementPrototype.mozMatchesSelector ||
         _elementPrototype.msMatchesSelector ||
         _elementPrototype.webkitMatchesSelector ||
-        function elementMatches(el, selector) {
-            var els = el.ownerDocument.querySelectorAll(selector);
+        function elementMatches(node, selector) {
+            var nodes = (node.ownerDocument || document).querySelectorAll(selector);
 
             var index = 0;
-            while (els[index] && el !== els[index]) {
+            while (nodes[index] && node !== nodes[index]) {
                 index++;
             }
 
-            return !!els[index];
+            return !!nodes[index];
         };
 
     // Public API
