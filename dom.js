@@ -62,6 +62,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         closest: closest,
         contents: contents,
         empty: empty,
+        html: html,
         inside: append,
         is: matches,
         matches: matches,
@@ -71,8 +72,8 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         parents: parents,
         prepend: prepend,
         prev: previous,
-        previous: previous,
         prevAll: previousAll,
+        previous: previous,
         previousAll: previousAll,
         remove: remove,
         renew: replace,
@@ -80,6 +81,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         siblings: siblings,
         start: prepend,
         styles: styles,
+        text: text,
         unwrap: unwrap,
         wrap: wrap,
 
@@ -211,6 +213,23 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      */
     function empty(node) {
         node.textContent = '';
+    }
+
+    /**
+     * Get the HTML of a node
+     *
+     * @param {Node} node Node to retrieve the HTML of
+     * @param {string} htmlString HTML string to apply. If left undefined this is used as a getter
+     * @return {string|undefined} HTML of the node; otherwise, undefined if used as a setter
+     */
+    function html(node, htmlString) {
+        if (htmlString === undefined) {
+            return node.innerHTML;
+        }
+
+        node.innerHTML = htmlString;
+
+        return undefined;
     }
 
     /**
@@ -374,6 +393,23 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      */
     function styles(node) {
         return node.ownerDocument.defaultView.getComputedStyle(node, null);
+    }
+
+    /**
+     * Get the text of a node
+     *
+     * @param {Node} node Node to retrieve the text of
+     * @param {string} textString Text string to apply. If left undefined this is used as a getter
+     * @return {string|undefined} Text of the node; otherwise, undefined if used as a setter
+     */
+    function text(node, textString) {
+        if (textString === undefined) {
+            return node.textContent;
+        }
+
+        node.textContent = textString;
+
+        return undefined;
     }
 
     /**
