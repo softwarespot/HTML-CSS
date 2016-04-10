@@ -52,6 +52,9 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     var _objectEmpty = Object.create(null);
     var _objectToString = Object.prototype.toString;
 
+    // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
+    var _reIsTemplate = /(?:^template$)/i;
+
     // Parsing the native toString() return value e.g. [object Object]
     var _reTypeOf = /(?:^\[object\s(.*?)\]$)/;
 
@@ -471,9 +474,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     function wrap(node, nodeWrap) {
         before(node, nodeWrap);
 
-        // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
-        var reIsTemplate = /(?:^template$)/i;
-        if (reIsTemplate.test(nodeWrap.nodeName) && nodeWrap.content) {
+        if (_reIsTemplate.test(nodeWrap.nodeName) && nodeWrap.content) {
             nodeWrap = nodeWrap.content;
         }
 
@@ -510,7 +511,6 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {Node} A sibling node; otherwise, null on error
      */
     function _sibling(node, startNode, jQueryLike, type) {
-
         // Enforce the default value
         var allNodes = jQueryLike !== true;
 
