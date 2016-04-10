@@ -222,22 +222,22 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {boolean} True, the descendant node is a descendant of the parent node; otherwise, false
      */
     function contains(node, nodeDescendant) {
-        return node.contains(nodeDescendant);
+        return node !== nodeDescendant && node.contains(nodeDescendant);
     }
 
     /**
      * Get the contents of a node
      *
-     * @param {HTMLIFrameElement|Node} el HTMLIFrameElement/Node to get the contents of
+     * @param {HTMLIFrameElement|Node} nodeEl HTMLIFrameElement/Node to get the contents of
      * @return {Document|array} A Document if an iFrame/an array of nodes; otherwise, an empty array on error
      */
-    function contents(el) {
-        var contents = el.documentContent;
+    function contents(nodeEl) {
+        var contents = nodeEl.documentContent;
         if (contents) {
             return contents;
         }
 
-        return _arrayFrom(el.childNodes);
+        return _arrayFrom(nodeEl.childNodes);
     }
 
     /**
@@ -510,6 +510,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * @return {Node} A sibling node; otherwise, null on error
      */
     function _sibling(node, startNode, jQueryLike, type) {
+
         // Enforce the default value
         var allNodes = jQueryLike !== true;
 
