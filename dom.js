@@ -66,11 +66,13 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         children: children,
         clone: clone,
         closest: closest,
+        contains: contains,
         contents: contents,
+        detach: remove,
         empty: empty,
         html: html,
         inside: append,
-        is: matches,
+        is: is,
         matches: matches,
         next: next,
         nextAll: nextAll,
@@ -93,7 +95,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         wrap: wrap,
 
         // Helper functions not related to DOM traversal or manipulation
-        toArray: _arrayFrom,
+        arrayFrom: _arrayFrom,
         type: type,
     };
 
@@ -102,13 +104,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.js
      *
      * @param {string} selector Selector string
-     * @param {object|null|undefined} context Node to query on. Default is document if falsy
+     * @param {Node|null|undefined} context Node to query on. Default is document if left falsy i.e. undefined
      * @return {Node|null} A node; otherwise, null on error
      */
     function $(selector, context) {
+        if (selector instanceof Node || selector instanceof Window) {
+            return selector;
+        }
+
         return type(selector) === 'string' ?
             (context || document).querySelector(selector) :
-            (selector || null);
+            null;
     }
 
     /**
@@ -116,7 +122,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
      * Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.js
      *
      * @param {string} selector Selector string
-     * @param {object|null|undefined} context Node to query on. Default is document if falsy
+     * @param {Node|null|undefined} context Node to query on. Default is document if left falsy i.e. undefined
      * @return {array} An array of nodes; otherwise, an empty array on error
      */
     function $$(selector, context) {
@@ -126,7 +132,7 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
 
         return type(selector) === 'string' ?
             _arrayFrom((context || document).querySelectorAll(selector)) :
-            (selector || []);
+            [];
     }
 
     /**
@@ -209,6 +215,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     }
 
     /**
+     * Check if a node contains another node i.e. is a descendant of its parent node
+     *
+     * @param {Node} node Node to use as the parent
+     * @param {Node} nodeDescendant Node use as the descendant
+     * @return {boolean} True, the descendant node is a descendant of the parent node; otherwise, false
+     */
+    function contains(node, nodeDescendant) {
+        return node.contains(nodeDescendant);
+    }
+
+    /**
      * Get the contents of a node
      *
      * @param {HTMLIFrameElement|Node} el HTMLIFrameElement/Node to get the contents of
@@ -249,6 +266,17 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
         node.innerHTML = htmlString;
 
         return UNDEFINED;
+    }
+
+    /**
+     * Check if two nodes are exactly the same reference
+     *
+     * @param {Node} node Node to check
+     * @param {Node} nodeDup Other node to check
+     * @return {boolean} True, both nodes point to the same reference; otherwise, false
+     */
+    function is(node, nodeOther) {
+        return node === nodeOther;
     }
 
     /**
