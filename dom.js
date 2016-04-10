@@ -357,7 +357,6 @@ var domElements = (function domElementsModule(document, Array, Element, JSON, No
      * @return {array} Array of nodes/elements; otherwise, an empty array on error
      */
     function parseHTML(htmlString, jQueryLike) {
-        // Don't
         var context = document.implementation.createHTMLDocument();
 
         // Idea by jQuery, URL: https://github.com/jquery/jquery/blob/master/src/core/parseHTML.js#L36
