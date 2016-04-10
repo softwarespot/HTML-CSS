@@ -1,4 +1,4 @@
-var domElements = (function domElementsModule(document, Array, Element, Node, Object, Window) {
+var domElements = (function domElementsModule(document, Array, Element, JSON, Node, Object, Window) {
     // Constants
     var UNDEFINED = undefined;
 
@@ -99,6 +99,9 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
 
         // Helper functions not related to DOM traversal or manipulation
         arrayFrom: _arrayFrom,
+        makeArray: _arrayFrom,
+        parseHTML: parseHTML,
+        parseJSON: JSON.parse,
         type: type,
     };
 
@@ -347,6 +350,29 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
     }
 
     /**
+     * Parse a HTML string to nodes
+     *
+     * @param {string} htmlString HTML string to parse
+     * @param {boolean} jQueryLike Set to true to filter out those nodes which aren't elements (like jQuery). Default is false
+     * @return {array} Array of nodes/elements; otherwise, an empty array on error
+     */
+    function parseHTML(htmlString, jQueryLike) {
+        // Don't
+        var context = document.implementation.createHTMLDocument();
+
+        // Idea by jQuery, URL: https://github.com/jquery/jquery/blob/master/src/core/parseHTML.js#L36
+        // Set the base href for the created document so any parsed elements with URLs
+        // are based on the document's URL
+        var base = context.createElement('base');
+        base.href = document.location.href;
+        context.head.appendChild(base);
+
+        context.body.innerHTML = htmlString;
+
+        return children(context.body, jQueryLike);
+    }
+
+    /**
      * Insert a node before an node's content
      *
      * @param {Node} node Node to prepend before
@@ -549,4 +575,4 @@ var domElements = (function domElementsModule(document, Array, Element, Node, Ob
 
         return siblingNodes;
     }
-}(window.document, window.Array, window.Element, window.Node, window.Object, window.Window));
+}(window.document, window.Array, window.Element, window.JSON, window.Node, window.Object, window.Window));
