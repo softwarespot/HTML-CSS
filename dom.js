@@ -1,8 +1,25 @@
-var domElements = (function domElementsModule(document, Array, Element, JSON, Node, Object, Window) {
+var domElements = (function domElementsModule(window, document, Array, Element, JSON, Node, Object, Promise, Window) {
     // Constants
     var UNDEFINED = undefined;
 
     // Fields
+
+    // DOM ready related variables
+    var _resolveReady;
+    var _isReady = false;
+    var _listReady = new window.Promise(function promiseReady(resolve) {
+        _resolveReady = resolve;
+    });
+
+    // Check if the DOM has completed loading or is not in a loading state
+    if (document.readyState === 'complete' || document.readyState !== 'loading') {
+        _domReady();
+    } else {
+        document.addEventListener('DOMContentLoaded', _domReady);
+
+        // Fallback to when the window has been fully loaded. This will always be called
+        window.addEventListener('load', _domReady);
+    }
 
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
@@ -102,6 +119,7 @@ var domElements = (function domElementsModule(document, Array, Element, JSON, No
         makeArray: _arrayFrom,
         parseHTML: parseHTML,
         parseJSON: JSON.parse,
+        ready: ready,
         type: type,
     };
 
@@ -405,6 +423,16 @@ var domElements = (function domElementsModule(document, Array, Element, JSON, No
     }
 
     /**
+     * Invoke a function once the DOM has loaded
+     *
+     * @param {function} fn Callback function to invoke
+     * @return {undefined}
+     */
+    function ready(fn) {
+        _listReady.then(fn);
+    }
+
+    /**
      * Remove a node
      *
      * @param {Node} node Node to remove
@@ -526,6 +554,27 @@ var domElements = (function domElementsModule(document, Array, Element, JSON, No
         parentNode.removeChild(node);
     }
 
+    // Private function
+
+    /**
+     * Callback function for the DOM ready addEventListener calls
+     *
+     * @return {undefined}
+     */
+    function _domReady() {
+        if (_isReady) {
+            return;
+        }
+
+        // Cache that the DOM is ready and resolve the promise
+        _isReady = true;
+        _resolveReady();
+
+        // Clear up the event handlers
+        document.removeEventListener('DOMContentLoaded', _domReady);
+        window.removeEventListener('load', _domReady);
+    }
+
     /**
      * Get the first sibling of a node based on the type e.g. next/previous
      *
@@ -574,4 +623,4 @@ var domElements = (function domElementsModule(document, Array, Element, JSON, No
 
         return siblingNodes;
     }
-}(window.document, window.Array, window.Element, window.JSON, window.Node, window.Object, window.Window));
+}(window, window.document, window.Array, window.Element, window.JSON, window.Node, window.Object, window.Promise, window.Window));
