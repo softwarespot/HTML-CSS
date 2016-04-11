@@ -7,7 +7,7 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
     // DOM ready related variables
     var _resolveReady;
     var _isReady = false;
-    var _listReady = new window.Promise(function promiseReady(resolve) {
+    var _listReady = new Promise(function promiseReady(resolve) {
         _resolveReady = resolve;
     });
 
@@ -426,10 +426,18 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
      * Invoke a function once the DOM has loaded
      *
      * @param {function} fn Callback function to invoke
-     * @return {undefined}
+     * @return {promise} A promise that is resolved once the DOM is ready
      */
     function ready(fn) {
-        _listReady.then(fn);
+        if (type(fn) === 'function') {
+            _listReady.then(fn);
+        }
+
+        return new Promise(function promise(resolve /* , reject */) {
+            _listReady.then(function then() {
+                resolve();
+            });
+        });
     }
 
     /**
