@@ -5,8 +5,7 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
     // Fields
 
     // DOM ready related variables
-    var _resolveReady;
-    var _isReady = false;
+    var _resolveReady = null;
     var _listReady = new Promise(function promiseReady(resolve) {
         _resolveReady = resolve;
     });
@@ -570,13 +569,14 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
      * @return {undefined}
      */
     function _domReady() {
-        if (_isReady) {
+        if (_resolveReady === null) {
             return;
         }
 
-        // Cache that the DOM is ready and resolve the promise
-        _isReady = true;
         _resolveReady();
+
+        // Set to null to indicate the DOM is ready
+        _resolveReady = null;
 
         // Clear up the event handlers
         document.removeEventListener('DOMContentLoaded', _domReady);
