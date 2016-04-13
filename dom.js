@@ -87,6 +87,7 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
         closest: closest,
         contains: contains,
         contents: contents,
+        deferred: deferred,
         detach: remove,
         empty: empty,
         html: html,
@@ -264,6 +265,30 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
     }
 
     /**
+     * Create a deferred
+     *
+     * @param {function|undefined} fn An optional function to call with deferred object
+     * @return {object} An object with the property function 'promise, 'resolve' and 'reject'
+     */
+    function deferred(fn) {
+        var defer = {};
+
+        var promise = new Promise(function promise(resolve, reject) {
+            defer.resolve = resolve;
+            defer.reject = reject;
+        });
+
+        defer.promise = promise;
+
+        // Pass the deferred object to the callback function
+        if (type(fn) === 'function') {
+            fn(defer);
+        }
+
+        return defer;
+    }
+
+    /**
      * Empty the contents of a node
      * Idea by dom.js, URL: https://github.com/component/dom/blob/master/dom.js#L2789
      *
@@ -432,7 +457,7 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
             _listReady.then(fn);
         }
 
-        return new Promise(function promise(resolve /* , reject */) {
+        return new Promise(function promise(resolve /* , reject */ ) {
             _listReady.then(function then() {
                 resolve();
             });
