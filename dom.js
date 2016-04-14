@@ -273,12 +273,10 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
     function deferred(fn) {
         var defer = {};
 
-        var promise = new Promise(function promise(resolve, reject) {
+        defer.promise = new Promise(function promiseDeferred(resolve, reject) {
             defer.resolve = resolve;
             defer.reject = reject;
         });
-
-        defer.promise = promise;
 
         // Pass the deferred object to the callback function
         if (type(fn) === 'function') {
