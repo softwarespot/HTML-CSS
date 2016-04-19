@@ -714,7 +714,6 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
         return siblingNodes;
     }
 }(
-
     window,
     window.document,
     window.document.head,
