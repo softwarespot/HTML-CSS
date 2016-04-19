@@ -307,9 +307,10 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
      * Idea by Liam Newmarch, URL: http://liamnewmarch.co.uk/promises/
      *
      * @param {string} sourceFile Script file to load
+     * @param {Node|null|undefined} context Node to append to. Default is head if left falsy i.e. undefined
      * @return {promise} A promise that is resolved once the script has been loaded. The script file url is passed on success
      */
-    function getScript(sourceFile) {
+    function getScript(sourceFile, context) {
         var _nodeScript = document.createElement('script');
 
         // Set the source attribute
@@ -351,8 +352,7 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
             _nodeScript.addEventListener('load', _onResolve);
             _nodeScript.addEventListener('error', _onReject);
 
-            // Append to the HEAD node
-            head.appendChild(_nodeScript);
+            (context || head).appendChild(_nodeScript);
         });
     }
 
