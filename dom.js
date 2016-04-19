@@ -1,13 +1,13 @@
-var domElements = (function domElementsModule(window, document, Array, Element, JSON, Node, Object, Promise, Window) {
+var domElements = (function domElementsModule(window, document, head, body, Array, Element, JSON, Node, Object, Promise, Window) {
     // Constants
     var UNDEFINED = undefined;
 
     // Fields
 
     // DOM ready related variables
-    var _resolveReady = null;
-    var _listReady = new Promise(function promiseReady(resolve) {
-        _resolveReady = resolve;
+    var _domReadyResolve = null;
+    var _domReadyPromise = new Promise(function promiseReady(resolve) {
+        _domReadyResolve = resolve;
     });
 
     // Check if the DOM has completed loading or is not in a loading state
@@ -87,7 +87,6 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
         closest: closest,
         contains: contains,
         contents: contents,
-        deferred: deferred,
         detach: remove,
         empty: empty,
         html: html,
@@ -116,6 +115,8 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
 
         // Helper functions not related to DOM traversal or manipulation
         arrayFrom: _arrayFrom,
+        deferred: deferred,
+        getScript: getScript,
         makeArray: _arrayFrom,
         parseHTML: parseHTML,
         parseJSON: JSON.parse,
@@ -273,10 +274,14 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
     function deferred(fn) {
         var defer = {};
 
-        defer.promise = new Promise(function promiseDeferred(resolve, reject) {
+        var promise = new Promise(function promiseDeferred(resolve, reject) {
             defer.resolve = resolve;
             defer.reject = reject;
         });
+
+        defer.promise = function promiseFn() {
+            return promise;
+        };
 
         // Pass the deferred object to the callback function
         if (type(fn) === 'function') {
@@ -295,6 +300,60 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
      */
     function empty(node) {
         text(node, '');
+    }
+
+    /**
+     * Load a script file
+     * Idea by Liam Newmarch, URL: http://liamnewmarch.co.uk/promises/
+     *
+     * @param {string} sourceFile Script file to load
+     * @return {promise} A promise that is resolved once the script has been loaded. The script file url is passed on success
+     */
+    function getScript(sourceFile) {
+        var _nodeScript = document.createElement('script');
+
+        // Set the source attribute
+        _nodeScript.src = sourceFile;
+
+        // Set script loading to be asynchronous
+        _nodeScript.async = true;
+
+        // _nodeScript.crossOrigin = 'anonymous';
+
+        // Store the promise functions to call once the script has been loaded
+        var _resolve = null;
+        var _reject = null;
+
+        // On successful script load
+        function _onResolve() {
+            _resolve(sourceFile);
+            _removeEvents();
+        }
+
+        // On script loading failure
+        function _onReject() {
+            _reject(sourceFile);
+            _removeEvents();
+        }
+
+        // Remove the assigned event listeners and remove the promise function references
+        function _removeEvents() {
+            _resolve = null;
+            _reject = null;
+
+            _nodeScript.removeEventListener('load', _onResolve);
+            _nodeScript.removeEventListener('error', _onReject);
+        }
+
+        return new Promise(function promise(resolve, reject) {
+            _resolve = resolve;
+            _reject = reject;
+            _nodeScript.addEventListener('load', _onResolve);
+            _nodeScript.addEventListener('error', _onReject);
+
+            // Append to the HEAD node
+            head.appendChild(_nodeScript);
+        });
     }
 
     /**
@@ -452,11 +511,11 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
      */
     function ready(fn) {
         if (type(fn) === 'function') {
-            _listReady.then(fn);
+            _domReadyPromise.then(fn);
         }
 
-        return new Promise(function promise(resolve /* , reject */ ) {
-            _listReady.then(function then() {
+        return new Promise(function promise(resolve /* , reject */) {
+            _domReadyPromise.then(function then() {
                 resolve();
             });
         });
@@ -592,14 +651,14 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
      * @return {undefined}
      */
     function _domReady() {
-        if (_resolveReady === null) {
+        if (_domReadyResolve === null) {
             return;
         }
 
-        _resolveReady();
+        _domReadyResolve();
 
         // Set to null to indicate the DOM is ready
-        _resolveReady = null;
+        _domReadyResolve = null;
 
         // Clear up the event handlers
         document.removeEventListener('DOMContentLoaded', _domReady);
@@ -654,4 +713,17 @@ var domElements = (function domElementsModule(window, document, Array, Element, 
 
         return siblingNodes;
     }
-}(window, window.document, window.Array, window.Element, window.JSON, window.Node, window.Object, window.Promise, window.Window));
+}(
+
+    window,
+    window.document,
+    window.document.head,
+    window.document.body,
+    window.Array,
+    window.Element,
+    window.JSON,
+    window.Node,
+    window.Object,
+    window.Promise,
+    window.Window
+));
