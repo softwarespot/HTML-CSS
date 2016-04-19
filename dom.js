@@ -274,12 +274,12 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
     function deferred(fn) {
         var defer = {};
 
-        var promise = new Promise(function promiseDeferred(resolve, reject) {
+        var promise = new Promise(function promiseCreate(resolve, reject) {
             defer.resolve = resolve;
             defer.reject = reject;
         });
 
-        defer.promise = function promiseFn() {
+        defer.promise = function promiseDeferred() {
             return promise;
         };
 
