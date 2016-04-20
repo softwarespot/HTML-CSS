@@ -1,6 +1,9 @@
 var domElements = (function domElementsModule(window, document, head, body, Array, Element, JSON, Node, Object, Promise, Window) {
     // Constants
     var UNDEFINED = undefined;
+    
+    // Semver of the module
+    var VERSION = '0.1.0';
 
     // Fields
 
@@ -122,6 +125,7 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
         parseJSON: JSON.parse,
         ready: ready,
         type: type,
+        version: version,
     };
 
     /**
@@ -641,6 +645,15 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
         }
 
         parentNode.removeChild(node);
+    }
+    
+    /**
+     * Get the semver of the module
+     * 
+     * @return {string} Semver numver
+     */
+    function version() {
+        return VERSION;
     }
 
     // Private function
