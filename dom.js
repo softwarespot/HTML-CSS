@@ -1,7 +1,7 @@
 var domElements = (function domElementsModule(window, document, head, body, Array, Element, JSON, Node, Object, Promise, Window) {
     // Constants
     var UNDEFINED = undefined;
-    
+
     // Semver of the module
     var VERSION = '0.1.0';
 
@@ -13,15 +13,7 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
         _domReadyResolve = resolve;
     });
 
-    // Check if the DOM has completed loading or is not in a loading state
-    if (document.readyState === 'complete' || document.readyState !== 'loading') {
-        _domReady();
-    } else {
-        document.addEventListener('DOMContentLoaded', _domReady);
-
-        // Fallback to when the window has been fully loaded. This will always be called
-        window.addEventListener('load', _domReady);
-    }
+    _domReady();
 
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
@@ -646,10 +638,10 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
 
         parentNode.removeChild(node);
     }
-    
+
     /**
      * Get the semver of the module
-     * 
+     *
      * @return {string} Semver numver
      */
     function version() {
@@ -659,23 +651,40 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
     // Private function
 
     /**
-     * Callback function for the DOM ready addEventListener calls
+     * Register events for DOM ready
      *
      * @return {undefined}
      */
     function _domReady() {
-        if (_domReadyResolve === null) {
-            return;
+        /**
+         * Callback function for the DOM ready addEventListener calls
+         *
+         * @return {undefined}
+         */
+        function _domContentLoaded() {
+            if (_domReadyResolve === null) {
+                return;
+            }
+
+            _domReadyResolve();
+
+            // Set to null to indicate the DOM is ready
+            _domReadyResolve = null;
+
+            // Clear up the event handlers
+            document.removeEventListener('DOMContentLoaded', _domContentLoaded);
+            window.removeEventListener('load', _domContentLoaded);
         }
 
-        _domReadyResolve();
+        // Check if the DOM has completed loading or is not in a loading state
+        if (document.readyState === 'complete' || document.readyState !== 'loading') {
+            _domContentLoaded();
+        } else {
+            document.addEventListener('DOMContentLoaded', _domContentLoaded);
 
-        // Set to null to indicate the DOM is ready
-        _domReadyResolve = null;
-
-        // Clear up the event handlers
-        document.removeEventListener('DOMContentLoaded', _domReady);
-        window.removeEventListener('load', _domReady);
+            // Fallback to when the window has been fully loaded. This will always be called
+            window.addEventListener('load', _domContentLoaded);
+        }
     }
 
     /**
