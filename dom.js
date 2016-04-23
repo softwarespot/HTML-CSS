@@ -410,7 +410,13 @@ var domElements = (function domElementsModule(
      * @returns {boolean} True, the value is a function datatype; otherwise, false
      */
     function isFunction(value) {
-        return typeof value === 'function' || type(value) === 'function';
+        if (typeof value === 'function') {
+            return true;
+        }
+
+        var type = type(value);
+
+        return type === 'function' || type === 'generatorfunction';
     }
 
     /**
