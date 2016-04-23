@@ -132,7 +132,9 @@ var domElements = (function domElementsModule(
         deferred: deferred,
         getScript: getScript,
         isArray: Array.isArray,
+        isFunction: isFunction,
         isNumeric: isNumeric,
+        isWindow: isWindow,
         makeArray: _arrayFrom,
         parseHTML: parseHTML,
         parseJSON: JSON.parse,
@@ -191,7 +193,7 @@ var domElements = (function domElementsModule(
     }
 
     /**
-     * Insert a node after an node's content
+     * Insert a node after a node's content
      *
      * @param {Node} node Node to append after
      * @param {Node} nodeAfter Node to append
@@ -402,16 +404,36 @@ var domElements = (function domElementsModule(
     }
 
     /**
-     * Check if a value is numeric
+     * Check if a value is a function datatype
+     *
+     * @param {mixed} value Value to check
+     * @returns {boolean} True, the value is a function datatype; otherwise, false
+     */
+    function isFunction(value) {
+        return typeof value === 'function' || type(value) === 'function';
+    }
+
+    /**
+     * Check if a value is numerical
      * Idea from jQuery 3.0
      *
-     * @param {mixed} value Value to check is numeric
-     * @return {boolean} True, the value is numeric; otherwise, false
+     * @param {mixed} value Value to check is numerical
+     * @return {boolean} True, the value is numerical; otherwise, false
      */
     function isNumeric(value) {
         var type = type(value);
 
         return (type === 'number' || type === 'string') && !_numberIsNaN(value - _numberParseFloat(value));
+    }
+
+    /**
+     * Check if an object is a window
+     *
+     * @param {object} object Object to check
+     * @return {boolean} True, the object is window; otherwise, false
+     */
+    function isWindow(object) {
+        return object && object === object.window;
     }
 
     /**
@@ -501,7 +523,7 @@ var domElements = (function domElementsModule(
     }
 
     /**
-     * Insert a node before an node's content
+     * Insert a node before a node's content
      *
      * @param {Node} node Node to prepend before
      * @param {Node} nodeAfter Node to prepend
