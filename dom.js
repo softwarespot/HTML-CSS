@@ -76,7 +76,6 @@ var domElements = (function domElementsModule(
             return !!nodes[i];
         };
 
-    var _numberIsFinite = Number.isFinite || isFinite;
     var _numberIsNaN = Number.isNaN || isNaN;
     var _numberParseFloat = Number.parseFloat || parseFloat;
 
