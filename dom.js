@@ -307,48 +307,48 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
      * @return {promise} A promise that is resolved once the script has been loaded. The script file url is passed on success
      */
     function getScript(sourceFile, context) {
-        var _nodeScript = document.createElement('script');
+        var node = document.createElement('script');
 
         // Set the source attribute
-        _nodeScript.src = sourceFile;
+        node.src = sourceFile;
 
         // Set script loading to be asynchronous
-        _nodeScript.async = true;
+        node.async = true;
 
-        // _nodeScript.crossOrigin = 'anonymous';
+        // node.crossOrigin = 'anonymous';
 
         // Store the promise functions to call once the script has been loaded
-        var _resolve = null;
-        var _reject = null;
+        var resolveFn = null;
+        var rejectFn = null;
 
         // On successful script load
-        function _onResolve() {
-            _resolve(sourceFile);
-            _removeEvents();
+        function onResolve() {
+            resolveFn(sourceFile);
+            removeEvents();
         }
 
         // On script loading failure
-        function _onReject() {
-            _reject(sourceFile);
-            _removeEvents();
+        function onReject() {
+            rejectFn(sourceFile);
+            removeEvents();
         }
 
         // Remove the assigned event listeners and remove the promise function references
-        function _removeEvents() {
-            _resolve = null;
-            _reject = null;
+        function removeEvents() {
+            resolveFn = null;
+            rejectFn = null;
 
-            _nodeScript.removeEventListener('load', _onResolve);
-            _nodeScript.removeEventListener('error', _onReject);
+            node.removeEventListener('load', onResolve);
+            node.removeEventListener('error', onReject);
         }
 
         return new Promise(function promise(resolve, reject) {
-            _resolve = resolve;
-            _reject = reject;
-            _nodeScript.addEventListener('load', _onResolve);
-            _nodeScript.addEventListener('error', _onReject);
+            resolveFn = resolve;
+            rejectFn = reject;
+            node.addEventListener('load', onResolve);
+            node.addEventListener('error', onReject);
 
-            (context || head).appendChild(_nodeScript);
+            (context || head).appendChild(node);
         });
     }
 
