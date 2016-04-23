@@ -1,4 +1,20 @@
-var domElements = (function domElementsModule(window, document, head, body, Array, Element, JSON, Node, Object, Promise, Window) {
+var domElements = (function domElementsModule(
+    window,
+    document,
+    head,
+    body,
+    Array,
+    Element,
+    isFinite,
+    isNaN,
+    JSON,
+    Node,
+    Number,
+    Object,
+    parseFloat,
+    Promise,
+    Window
+) {
     // Constants
     var UNDEFINED = undefined;
 
@@ -60,6 +76,10 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
             return !!nodes[i];
         };
 
+    var _numberIsFinite = Number.isFinite || isFinite;
+    var _numberIsNaN = Number.isNaN || isNaN;
+    var _numberParseFloat = Number.parseFloat || parseFloat;
+
     var _objectEmpty = Object.create(null);
     var _objectToString = Object.prototype.toString;
 
@@ -112,6 +132,8 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
         arrayFrom: _arrayFrom,
         deferred: deferred,
         getScript: getScript,
+        isArray: Array.isArray,
+        isNumeric: isNumeric,
         makeArray: _arrayFrom,
         parseHTML: parseHTML,
         parseJSON: JSON.parse,
@@ -378,6 +400,19 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
      */
     function is(node, nodeOther) {
         return node === nodeOther;
+    }
+
+    /**
+     * Check if a value is numeric
+     * Idea from jQuery 3.0
+     *
+     * @param {mixed} value Value to check is numeric
+     * @return {boolean} True, the value is numeric; otherwise, false
+     */
+    function isNumeric(value) {
+        var type = type(value);
+
+        return (type === 'number' || type === 'string') && !_numberIsNaN(value - _numberParseFloat(value));
     }
 
     /**
@@ -742,9 +777,13 @@ var domElements = (function domElementsModule(window, document, head, body, Arra
     window.document.body,
     window.Array,
     window.Element,
+    window.isFinite,
+    window.isNaN,
     window.JSON,
     window.Node,
+    window.Number,
     window.Object,
+    window.parseFloat,
     window.Promise,
     window.Window
 ));
