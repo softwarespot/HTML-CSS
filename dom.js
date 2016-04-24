@@ -79,8 +79,9 @@ var domElements = (function domElementsModule(
     var _numberIsNaN = Number.isNaN || isNaN;
     var _numberParseFloat = Number.parseFloat || parseFloat;
 
-    var _objectEmpty = Object.create(null);
+    var _objectCreate = Object.create;
     var _objectToString = Object.prototype.toString;
+    var _objectEmpty = _objectCreate(null);
 
     // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
     var _reIsTemplate = /(?:^template$)/i;
@@ -710,7 +711,7 @@ var domElements = (function domElementsModule(
         return VERSION;
     }
 
-    // Private function
+    // Private function(s)
 
     /**
      * Register events for DOM ready
