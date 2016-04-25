@@ -80,6 +80,7 @@ var domElements = (function domElementsModule(
     var _numberParseFloat = Number.parseFloat || parseFloat;
 
     var _objectCreate = Object.create;
+    var _objectKeys = Object.keys;
     var _objectToString = Object.prototype.toString;
     var _objectEmpty = _objectCreate(null);
 
@@ -132,7 +133,9 @@ var domElements = (function domElementsModule(
         arrayFrom: _arrayFrom,
         deferred: deferred,
         getScript: getScript,
+        globalEval: globalEval,
         isArray: Array.isArray,
+        isEmptyObject: isEmptyObject,
         isFunction: isFunction,
         isNumeric: isNumeric,
         isWindow: isWindow,
@@ -143,6 +146,8 @@ var domElements = (function domElementsModule(
         type: type,
         version: version,
     };
+
+    // Public function(s)
 
     /**
      * Wrapper for *.querySelector
@@ -226,7 +231,7 @@ var domElements = (function domElementsModule(
      */
     function children(node, jQueryLike) {
         // Enforce the default value
-        var allNodes = jQueryLike !== true;
+        var allNodes = (jQueryLike !== true);
 
         return _arrayFilter.call(node.childNodes, function filter(node) {
             return allNodes || node.nodeType === _nodeTypeElementNode;
@@ -242,7 +247,7 @@ var domElements = (function domElementsModule(
      */
     function clone(node, deep) {
         // Enforce the default value
-        deep = deep === true;
+        deep = (deep === true);
 
         return node.cloneNode(deep);
     }
@@ -377,6 +382,23 @@ var domElements = (function domElementsModule(
     }
 
     /**
+     * Globally evaluate code
+     *
+     * @param {string} code Code to be evaluated
+     * @param {Node|null|undefined} context Node to append to. Default is document if left falsy i.e. undefined
+     * @return {undefined}
+     */
+    function globalEval(code, context) {
+        context = context || document;
+
+        var script = context.createElement('script');
+        script.text = code;
+
+        var node = context.head.appendChild(script);
+        node.parentNode.removeChild(script);
+    }
+
+    /**
      * Get the HTML of a node
      *
      * @param {Node} node Node to retrieve the HTML of
@@ -402,6 +424,16 @@ var domElements = (function domElementsModule(
      */
     function is(node, nodeOther) {
         return node === nodeOther;
+    }
+
+    /**
+     * Check if an object is empty
+     *
+     * @param {object} object Object to check is empty
+     * @return {boolean} True, the object is empty
+     */
+    function isEmptyObject(object) {
+        return type(object) === 'object' && _objectKeys(object).length === 0;
     }
 
     /**
@@ -761,7 +793,7 @@ var domElements = (function domElementsModule(
      */
     function _sibling(node, startNode, jQueryLike, type) {
         // Enforce the default value
-        var allNodes = jQueryLike !== true;
+        var allNodes = (jQueryLike !== true);
 
         var siblingNode = startNode[type];
         while (!allNodes && siblingNode && siblingNode.nodeType !== _nodeTypeElementNode) {
@@ -784,7 +816,7 @@ var domElements = (function domElementsModule(
      */
     function _siblingAll(node, startNode, jQueryLike, type) {
         // Enforce the default value
-        var allNodes = jQueryLike !== true;
+        var allNodes = (jQueryLike !== true);
         var siblingNodes = [];
 
         var siblingNode = startNode[type];
