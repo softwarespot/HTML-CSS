@@ -84,6 +84,9 @@ var domElements = (function domElementsModule(
     var _objectToString = Object.prototype.toString;
     var _objectEmpty = _objectCreate(null);
 
+    // Cache the classname types
+    var _types = _objectCreate(null);
+
     // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
     var _reIsTemplate = /(?:^template$)/i;
 
@@ -684,17 +687,24 @@ var domElements = (function domElementsModule(
      * @return {string} Classname of the value
      */
     function type(value) {
-        var tag = _objectToString
-            .call(value)
-            .replace(_reTypeOf, '$1')
-            .toLowerCase();
+        var toString = _objectToString.call(value);
 
-        if (tag === 'number' && value !== value) { // eslint-disable-line
-            // Override number if a NaN
-            tag = 'nan';
+        // Check the internal cache
+        var type = _types[toString];
+        if (type) {
+            return type;
         }
 
-        return tag;
+        type = toString.replace(_reTypeOf, '$1').toLowerCase();
+        if (type === 'number' && isNaN(value)) {
+            // Override the number if a NaN
+            type = 'nan';
+        }
+
+        // Set the internal cache
+        _types[toString] = type;
+
+        return type;
     }
 
     /**
