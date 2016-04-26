@@ -80,9 +80,15 @@ var domElements = (function domElementsModule(
     var _numberParseFloat = Number.parseFloat || parseFloat;
 
     var _objectCreate = Object.create;
+    var _objectHasOwnProperty = Object.prototype.hasOwnProperty;
     var _objectKeys = Object.keys;
+    var _objectGetPrototypeOf = Object.getPrototypeOf;
     var _objectToString = Object.prototype.toString;
     var _objectEmpty = _objectCreate(null);
+
+    // An object as a string
+    var _createFnToString = _objectHasOwnProperty.toString;
+    var _fnToString = _createFnToString.call(Object);
 
     // Cache the classname types
     var _types = _objectCreate(null);
@@ -141,6 +147,7 @@ var domElements = (function domElementsModule(
         isEmptyObject: isEmptyObject,
         isFunction: isFunction,
         isNumeric: isNumeric,
+        isPlainObject: isPlainObject,
         isWindow: isWindow,
         makeArray: _arrayFrom,
         parseHTML: parseHTML,
@@ -469,6 +476,30 @@ var domElements = (function domElementsModule(
     }
 
     /**
+     * Check if an object is a plain object
+     * Idea by jQuery, URL: https://github.com/jquery/jquery/blob/master/src/core.js#L233
+     *
+     * @param {mixed} object Object to check
+     * @return {boolean} True, is a plain object; otherwise, false
+     */
+    function isPlainObject(object) {
+        if (!object || type(object) !== 'object') {
+            return false;
+        }
+
+        var prototype = _objectGetPrototypeOf(object);
+
+        // Objects with no prototype (e.g. Object.create(null)) are plain objects
+        if (!prototype) {
+            return true;
+        }
+
+        // Objects with prototype are plain if they were constructed by a global Object function
+        var cTor = _objectHasOwnProperty.call(prototype, 'constructor') && prototype.constructor;
+        return typeof cTor === 'function' && _createFnToString.call(cTor) === _fnToString;
+    }
+
+    /**
      * Check if an object is a window
      *
      * @param {object} object Object to check
@@ -687,22 +718,31 @@ var domElements = (function domElementsModule(
      * @return {string} Classname of the value
      */
     function type(value) {
-        var toString = _objectToString.call(value);
+        if (value === null || value === undefined) {
+            return ('' + value);
+        }
+
+        var type = typeof value;
+        if (type !== 'function' && type !== 'object') {
+            return type;
+        }
+
+        var classString = _objectToString.call(value);
 
         // Check the internal cache
-        var type = _types[toString];
+        type = _types[classString];
         if (type) {
             return type;
         }
 
-        type = toString.replace(_reTypeOf, '$1').toLowerCase();
+        type = classString.replace(_reTypeOf, '$1').toLowerCase();
         if (type === 'number' && isNaN(value)) {
             // Override the number if a NaN
             type = 'nan';
         }
 
         // Set the internal cache
-        _types[toString] = type;
+        _types[classString] = type;
 
         return type;
     }
