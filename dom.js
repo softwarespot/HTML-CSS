@@ -24,14 +24,6 @@ var domElements = (function domElementsModule(
 
     // Fields
 
-    // DOM ready related variables
-    var _domReadyResolve = null;
-    var _domReadyPromise = new Promise(function promiseReady(resolve) {
-        _domReadyResolve = resolve;
-    });
-
-    _domReady();
-
     // Node types
     var _nodeTypeDocumentNode = Node.DOCUMENT_NODE;
     var _nodeTypeFragmentNode = Node.DOCUMENT_FRAGMENT_NODE;
@@ -40,6 +32,7 @@ var domElements = (function domElementsModule(
     // Polyfills and caching
 
     var _arrayPrototype = Array.prototype;
+
     var _arrayFilter = _arrayPrototype.filter;
     var _arraySlice = _arrayPrototype.slice;
     var _arrayFrom = Array.from || function arrayFrom(arrayLike) {
@@ -80,25 +73,35 @@ var domElements = (function domElementsModule(
     var _numberIsNaN = Number.isNaN || isNaN;
     var _numberParseFloat = Number.parseFloat || parseFloat;
 
+    var _objectPrototype = Object.prototype;
+
     var _objectCreate = Object.create;
-    var _objectHasOwnProperty = Object.prototype.hasOwnProperty;
+    var _objectHasOwnProperty = _objectPrototype.hasOwnProperty;
     var _objectKeys = Object.keys;
     var _objectGetPrototypeOf = Object.getPrototypeOf;
-    var _objectToString = Object.prototype.toString;
+    var _objectToString = _objectPrototype.toString;
     var _objectEmpty = _objectCreate(null);
 
     // An object as a string
     var _createFnToString = _objectHasOwnProperty.toString;
     var _fnToString = _createFnToString.call(Object);
 
-    // Cache the classname types
-    var _types = _objectCreate(null);
+    // DOM ready related variables
+    var _domReadyResolve = null;
+    var _domReadyPromise = new Promise(function promiseReady(resolve) {
+        _domReadyResolve = resolve;
+    });
 
     // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
     var _reIsTemplate = /(?:^template$)/i;
 
     // Parsing the native toString() return value e.g. [object Object]
     var _reTypeOf = /(?:^\[object\s(.*?)\]$)/;
+
+    // Cache the classname types
+    var _types = _objectCreate(null);
+
+    _domReady();
 
     // Public API
     return {
