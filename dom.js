@@ -103,6 +103,16 @@ var domElements = (function domElementsModule(
 
     _domReady();
 
+    // Make each ID a global variable on the global object
+    // Many browsers do this anyway (it’s in the HTML5 specification)
+    // Idea by PrismJS, URL: https://github.com/PrismJS/prism/blob/gh-pages/utopia.js#L39
+    $$('[id]').filter(function filterId(el) {
+        // Coerce as a boolean datatype
+        return !!el.id;
+    }).forEach(function forEachId(el) {
+        window[el.id] = el;
+    });
+
     // Public API
     return {
         $$: $$,
