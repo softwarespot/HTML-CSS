@@ -20,7 +20,7 @@ var domElements = (function domElementsModule(
     var UNDEFINED = undefined;
 
     // Semver of the module
-    var VERSION = '0.1.0';
+    var VERSION = '0.2.0';
 
     // Fields
 
