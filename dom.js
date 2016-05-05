@@ -17,7 +17,7 @@ var domElements = (function domElementsModule(
     Window
 ) {
     // Constants
-    var UNDEFINED = undefined;
+    var UNDEFINED = void 0;
 
     // Semver of the module
     var VERSION = '0.2.0';
