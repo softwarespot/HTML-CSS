@@ -87,10 +87,8 @@ var domElements = (function domElementsModule(
     var _fnToString = _createFnToString.call(Object);
 
     // DOM ready related variables
-    var _domReadyResolve = null;
-    var _domReadyPromise = new Promise(function promiseReady(resolve) {
-        _domReadyResolve = resolve;
-    });
+    var _domReadyDefer = deferred();
+    var _domReadyResolve = _domReadyDefer.resolve;
 
     // Idea by Bliss, URL: https://github.com/LeaVerou/bliss/blob/gh-pages/bliss.shy.js#L624
     var _reIsTemplate = /(?:^template$)/i;
@@ -322,7 +320,7 @@ var domElements = (function domElementsModule(
      * @return {object} An object with the property function 'promise, 'resolve' and 'reject'
      */
     function deferred(fn) {
-        var defer = {};
+        var defer = _objectCreate(null);
 
         var promise = new Promise(function promiseCreate(resolve, reject) {
             defer.resolve = resolve;
@@ -361,6 +359,7 @@ var domElements = (function domElementsModule(
      * @return {promise} A promise that is resolved once the script has been loaded. The script file url is passed on success
      */
     function getScript(sourceFile, context) {
+        var defer = deferred();
         var node = document.createElement('script');
 
         // Set the source attribute
@@ -371,39 +370,30 @@ var domElements = (function domElementsModule(
 
         // node.crossOrigin = 'anonymous';
 
-        // Store the promise functions to call once the script has been loaded
-        var resolveFn = null;
-        var rejectFn = null;
-
         // On successful script load
         function onResolve() {
-            resolveFn(sourceFile);
+            defer.resolve(sourceFile);
             removeEvents();
         }
 
         // On script loading failure
         function onReject() {
-            rejectFn(sourceFile);
+            defer.reject(sourceFile);
             removeEvents();
         }
 
         // Remove the assigned event listeners and remove the promise function references
         function removeEvents() {
-            resolveFn = null;
-            rejectFn = null;
-
             node.removeEventListener('load', onResolve);
             node.removeEventListener('error', onReject);
         }
 
-        return new Promise(function promise(resolve, reject) {
-            resolveFn = resolve;
-            rejectFn = reject;
-            node.addEventListener('load', onResolve);
-            node.addEventListener('error', onReject);
+        node.addEventListener('load', onResolve);
+        node.addEventListener('error', onReject);
 
-            (context || head).appendChild(node);
-        });
+        (context || head).appendChild(node);
+
+        return defer.promise();
     }
 
     /**
@@ -650,15 +640,17 @@ var domElements = (function domElementsModule(
      * @return {promise} A promise that is resolved once the DOM is ready
      */
     function ready(fn) {
+        var promise = _domReadyDefer.promise();
         if (type(fn) === 'function') {
-            _domReadyPromise.then(fn);
+            promise.then(fn);
         }
 
-        return new Promise(function promise(resolve /* , reject */) {
-            _domReadyPromise.then(function then() {
-                resolve();
-            });
+        var defer = deferred();
+        promise.then(function then() {
+            defer.resolve();
         });
+
+        return defer.promise();
     }
 
     /**
