@@ -1,6 +1,7 @@
 var domElements = (function domElementsModule(
     window,
     document,
+    undefined,
     head,
     body,
     Array,
@@ -16,9 +17,6 @@ var domElements = (function domElementsModule(
     Promise,
     Window
 ) {
-    // Constants
-    var UNDEFINED = void 0;
-
     // Semver of the module
     var VERSION = '0.2.0';
 
@@ -421,13 +419,13 @@ var domElements = (function domElementsModule(
      * @return {string|undefined} HTML of the node; otherwise, undefined if used as a setter
      */
     function html(node, htmlString) {
-        if (htmlString === UNDEFINED) {
+        if (htmlString === undefined) {
             return node.innerHTML;
         }
 
         node.innerHTML = htmlString;
 
-        return UNDEFINED;
+        return undefined;
     }
 
     /**
@@ -708,13 +706,13 @@ var domElements = (function domElementsModule(
      * @return {string|undefined} Text of the node; otherwise, undefined if used as a setter
      */
     function text(node, textString) {
-        if (textString === UNDEFINED) {
+        if (textString === undefined) {
             return node.textContent;
         }
 
         node.textContent = textString;
 
-        return UNDEFINED;
+        return undefined;
     }
 
     /**
@@ -890,6 +888,7 @@ var domElements = (function domElementsModule(
 }(
     window,
     window.document,
+    void 0,
     window.document.head,
     window.document.body,
     window.Array,
