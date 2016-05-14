@@ -845,9 +845,7 @@ var domElements = (function domElementsModule(
      * @return {boolean} True, is a node and optional node type; otherwise, false
      */
     function _isNode(node, type) {
-        var isNode = node instanceof Node;
-
-        return isNode && (!type || node.nodeType === type);
+        return node instanceof Node && (!type || node.nodeType === type);
     }
 
     /**
