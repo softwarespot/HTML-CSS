@@ -179,7 +179,7 @@ var domElements = (function domElementsModule(
      * @return {Node|null} A node; otherwise, null on error
      */
     function $(selector, context) {
-        if (selector instanceof Node || selector instanceof Window) {
+        if (_isNode(selector) || selector instanceof Window) {
             return selector;
         }
 
@@ -197,7 +197,7 @@ var domElements = (function domElementsModule(
      * @return {array} An array of nodes; otherwise, an empty array on error
      */
     function $$(selector, context) {
-        if (selector instanceof Node || selector instanceof Window) {
+        if (_isNode(selector) || selector instanceof Window) {
             return [selector];
         }
 
@@ -835,6 +835,19 @@ var domElements = (function domElementsModule(
             // Fallback to when the window has been fully loaded. This will always be called
             window.addEventListener('load', _domContentLoaded);
         }
+    }
+
+    /**
+     * Check if a variable is a node and optional type
+     *
+     * @param {Node} node Node to check
+     * @param {number} type Optional Node.* type value to check
+     * @return {boolean} True, is a node and optional node type; otherwise, false
+     */
+    function _isNode(node, type) {
+        var isNode = node instanceof Node;
+
+        return isNode && (!type || node.nodeType === type);
     }
 
     /**
