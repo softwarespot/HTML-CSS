@@ -741,10 +741,6 @@ var domElements = (function domElementsModule(
         }
 
         type = classString.replace(_reTypeOf, '$1').toLowerCase();
-        if (type === 'number' && isNaN(value)) {
-            // Override the number if a NaN
-            type = 'nan';
-        }
 
         // Set the internal cache
         _types[classString] = type;
