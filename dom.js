@@ -456,10 +456,6 @@ var domElements = (function domElementsModule(
      * @returns {boolean} True, the value is a function datatype; otherwise, false
      */
     function isFunction(value) {
-        if (typeof value === 'function') {
-            return true;
-        }
-
         var type = type(value);
 
         return type === 'function' || type === 'generatorfunction';
@@ -499,7 +495,7 @@ var domElements = (function domElementsModule(
 
         // Objects with prototype are plain if they were constructed by a global Object function
         var cTor = _objectHasOwnProperty.call(prototype, 'constructor') && prototype.constructor;
-        return typeof cTor === 'function' && _createFnToString.call(cTor) === _fnToString;
+        return type(cTor) === 'function' && _createFnToString.call(cTor) === _fnToString;
     }
 
     /**
