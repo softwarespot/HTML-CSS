@@ -160,6 +160,7 @@ var domElements = (function domElementsModule(
         isPlainObject: isPlainObject,
         isWindow: isWindow,
         makeArray: _arrayFrom,
+        noop: noop,
         now: Date.now,
         parseHTML: parseHTML,
         parseJSON: JSON.parse,
@@ -542,6 +543,14 @@ var domElements = (function domElementsModule(
         return _siblingAll(node, node, jQueryLike, 'nextSibling');
     }
 
+    /**
+     * Create an empty function
+     *
+     * @return {function} Empty function
+     */
+    function noop() {
+        return function noop() {};
+    }
     /**
      * Get the parent of a node
      *
