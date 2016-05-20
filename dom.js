@@ -404,8 +404,8 @@ var domElements = (function domElementsModule(
      */
     function globalEval(code, context) {
         context = context || document;
-        
-        // An alternative to using eval    
+
+        // An alternative to using eval
         var script = context.createElement('script');
         script.text = code;
 
