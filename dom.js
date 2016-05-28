@@ -7,6 +7,7 @@ var domElements = (function domElementsModule(
     Array,
     Date,
     Element,
+    Function,
     isFinite,
     isNaN,
     JSON,
@@ -399,18 +400,12 @@ var domElements = (function domElementsModule(
      * Globally evaluate code
      *
      * @param {string} code Code to be evaluated
-     * @param {Node|null|undefined} context Node to append to. Default is document if left falsy i.e. undefined
      * @return {undefined}
      */
-    function globalEval(code, context) {
-        context = context || document;
-
-        // An alternative to using eval
-        var script = context.createElement('script');
-        script.text = code;
-
-        var node = context.head.appendChild(script);
-        node.parentNode.removeChild(script);
+    function globalEval(code) {
+        // Similiar to eval, but doesn't inherit the current scope
+        var fn = Function(code); // eslint-disable-line no-new-func
+        fn();
     }
 
     /**
@@ -907,6 +902,7 @@ var domElements = (function domElementsModule(
     window.Array,
     window.Date,
     window.Element,
+    window.Function,
     window.isFinite,
     window.isNaN,
     window.JSON,
