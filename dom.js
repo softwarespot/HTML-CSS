@@ -152,6 +152,7 @@ var domElements = (function domElementsModule(
         // Helper functions not related to DOM traversal or manipulation
         arrayFrom: _arrayFrom,
         deferred: deferred,
+        extend: extend,
         getScript: getScript,
         globalEval: globalEval,
         isArray: Array.isArray,
@@ -351,6 +352,30 @@ var domElements = (function domElementsModule(
     }
 
     /**
+     * Extend a target object with a list of source objects
+     * Idea by MDN, URL: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+     *
+     * @param {object} target Target object to extend
+     * @param {object0..objectN} ...sources Source objects to extend with
+     * @return {object} Extended target object
+     */
+    function extend(target) {
+        var args = _arrayFrom(arguments).filter(function filterArgs(source, index) {
+            // Remove the target object and sources which are nil
+            return index !== 0 || !_isNil(source);
+        });
+
+        target = Object(target);
+        args.forEach(function extendTarget(source) {
+            _objectKeys(source).forEach(function extendWithSource(key) {
+                target[key] = source[key];
+            });
+        });
+
+        return target;
+    }
+
+    /**
      * Load a script file
      * Idea by Liam Newmarch, URL: http://liamnewmarch.co.uk/promises/
      *
@@ -403,7 +428,7 @@ var domElements = (function domElementsModule(
      * @return {undefined}
      */
     function globalEval(code) {
-        // Similiar to eval, but doesn't inherit the current scope
+        // Similar to eval, but doesn't inherit the current scope, as it's an anonymous function
         var fn = Function(code); // eslint-disable-line no-new-func
         fn();
     }
@@ -832,6 +857,16 @@ var domElements = (function domElementsModule(
             // Fallback to when the window has been fully loaded. This will always be called
             window.addEventListener('load', _domContentLoaded);
         }
+    }
+
+    /**
+     * Check if a variable is null or undefined
+     *
+     * @param {mixed} value Value to check
+     * @returns {boolean} True, the value is null or undefined; otherwise, false
+     */
+    function _isNil(value) {
+        return value === null || value === undefined;
     }
 
     /**
