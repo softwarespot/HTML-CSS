@@ -112,8 +112,8 @@ var domElements = (function domElementsModule(
 
     // Public API
     return {
-        $$: $$,
         $: $,
+        $$: $$,
         after: after,
         append: append,
         around: wrap,
@@ -732,7 +732,7 @@ var domElements = (function domElementsModule(
      * @return {string|undefined} Text of the node; otherwise, undefined if used as a setter
      */
     function text(node, textString) {
-        if (textString === undefined) {
+        if (type(textString) === 'undefined') {
             return node.textContent;
         }
 
@@ -866,7 +866,9 @@ var domElements = (function domElementsModule(
      * @returns {boolean} True, the value is null or undefined; otherwise, false
      */
     function _isNil(value) {
-        return value === null || value === undefined;
+        var type = type(value);
+
+        return type === 'null' || type === 'undefined';
     }
 
     /**
