@@ -360,13 +360,11 @@ var domElements = (function domElementsModule(
      * @return {object} Extended target object
      */
     function extend(target) {
-        var args = _arrayFrom(arguments).filter(function filterArgs(source, index) {
+        target = Object(target);
+        _arrayFrom(arguments).filter(function filterArgs(source, index) {
             // Remove the target object and sources which are nil
             return index !== 0 || !_isNil(source);
-        });
-
-        target = Object(target);
-        args.forEach(function extendTarget(source) {
+        }).forEach(function extendTarget(source) {
             _objectKeys(source).forEach(function extendWithSource(key) {
                 target[key] = source[key];
             });
