@@ -14,6 +14,8 @@ var jsonp = (function jsonpModule(document, Object, Promise, encodeURIComponent,
      * Simple JSON-P implementation
      */
     function get(url, params) {
+        params = params || {};
+
         var error = _noop;
         var success = _noop;
 
@@ -28,7 +30,7 @@ var jsonp = (function jsonpModule(document, Object, Promise, encodeURIComponent,
         var extend = {};
         extend[params.callback || 'callback'] = 'jsonp.callbacks.' + callback;
 
-        params = Object.assign(params || {}, extend);
+        params = Object.assign(params, extend);
 
         // Create the query parameter string
         var queryString = '?' + Object.keys(params).map(function mapKeys(key) {
