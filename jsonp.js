@@ -24,17 +24,21 @@ var jsonp = (function jsonpModule(document, Object, Promise, encodeURIComponent,
 
         var callback = 'get' + _id++;
 
-        // Extend with the callback function parameter
-        params = Object.assign(params || {}, {
-            callback: 'jsonp.callbacks.' + callback,
-        });
+        // Extend with the (optional) callback function parameter
+        var extend = {};
+        extend[params.callback || 'callback'] = 'jsonp.callbacks.' + callback;
+
+        params = Object.assign(params || {}, extend);
+
+        // Create the query parameter string
+        var queryString = '?' + Object.keys(params).map(function mapKeys(key) {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+        }).join('&');
 
         // Create script element
         var script = document.createElement('script');
         script.async = true;
-        script.src = url + '?' + Object.keys(params).map(function mapKeys(key) {
-            return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-        }).join('&');
+        script.src = url + queryString;
 
         // Set callback function(s)
         script.addEventListener('error', function errorEvent() {
@@ -50,7 +54,7 @@ var jsonp = (function jsonpModule(document, Object, Promise, encodeURIComponent,
         // Inject script
         setTimeout(function setTimeout() {
             document.head.appendChild(script);
-        }, 2);
+        }, 0);
 
         return promise;
 
