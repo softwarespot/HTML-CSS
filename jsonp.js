@@ -60,7 +60,7 @@ var jsonp = (function jsonpModule(document, Object, Promise, encodeURIComponent,
 
         return promise;
 
-        // Destroy the JSON-P csllback function and script element node
+        // Destroy the JSON-P callback function and script element node
         function _destroy() {
             _api.callbacks[callback] = _noop;
             script.parentNode.removeChild(script);
