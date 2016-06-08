@@ -19,7 +19,7 @@ var domElements = (function domElementsModule(
     Window
 ) {
     // Semver of the module
-    var VERSION = '0.5.0';
+    var VERSION = '0.6.0';
 
     // Fields
 
