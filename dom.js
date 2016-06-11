@@ -16,6 +16,7 @@ var domElements = (function domElementsModule(
     Number,
     Object,
     parseFloat,
+    parseInt,
     Promise,
     Window
 ) {
@@ -32,12 +33,13 @@ var domElements = (function domElementsModule(
     // Polyfills and caching
 
     var _arrayPrototype = Array.prototype;
-
     var _arrayFilter = _arrayPrototype.filter;
     var _arraySlice = _arrayPrototype.slice;
+
     var _arrayFrom = Array.from || function arrayFrom(arrayLike) {
         return _arraySlice.call(arrayLike);
     };
+    var _arrayIsArray = Array.isArray;
 
     var _elementPrototype = Element.prototype;
 
@@ -106,8 +108,8 @@ var domElements = (function domElementsModule(
     // Idea by PrismJS, URL: https://github.com/PrismJS/prism/blob/gh-pages/utopia.js#L39
     $$('[id]').filter(function filterId(el) {
         // Coerce as a boolean datatype
-        return Boolean(el.id;
- )   }).forEach(function forEachId(el) {
+        return Boolean(el.id);
+    }).forEach(function forEachId(el) {
         window[el.id] = el;
     });
 
@@ -155,7 +157,7 @@ var domElements = (function domElementsModule(
         extend: extend,
         getScript: getScript,
         globalEval: globalEval,
-        isArray: Array.isArray,
+        isArray: _arrayIsArray,
         isEmptyObject: isEmptyObject,
         isFunction: isFunction,
         isNumeric: isNumeric,
@@ -946,6 +948,7 @@ var domElements = (function domElementsModule(
     window.Number,
     window.Object,
     window.parseFloat,
+    window.parseInt,
     window.Promise,
     window.Window
 ));
