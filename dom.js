@@ -5,6 +5,7 @@ var domElements = (function domElementsModule(
     head,
     body,
     Array,
+    Boolean,
     Date,
     Element,
     Function,
@@ -66,7 +67,7 @@ var domElements = (function domElementsModule(
             }
 
             // Coerce as a boolean datatype
-            return !!nodes[i];
+            return Boolean(nodes[i]);
         };
 
     var _numberIsNaN = Number.isNaN || isNaN;
@@ -105,8 +106,8 @@ var domElements = (function domElementsModule(
     // Idea by PrismJS, URL: https://github.com/PrismJS/prism/blob/gh-pages/utopia.js#L39
     $$('[id]').filter(function filterId(el) {
         // Coerce as a boolean datatype
-        return !!el.id;
-    }).forEach(function forEachId(el) {
+        return Boolean(el.id;
+ )   }).forEach(function forEachId(el) {
         window[el.id] = el;
     });
 
@@ -150,7 +151,6 @@ var domElements = (function domElementsModule(
         wrap: wrap,
 
         // Helper functions not related to DOM traversal or manipulation
-        arrayFrom: _arrayFrom,
         deferred: deferred,
         extend: extend,
         getScript: getScript,
@@ -935,6 +935,7 @@ var domElements = (function domElementsModule(
     window.document.head,
     window.document.body,
     window.Array,
+    window.Boolean,
     window.Date,
     window.Element,
     window.Function,
