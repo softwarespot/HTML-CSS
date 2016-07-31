@@ -1,7 +1,6 @@
 var domElements = (function domElementsModule(
     window,
     document,
-    undefined,
     head,
     body,
     Array,
@@ -62,14 +61,9 @@ var domElements = (function domElementsModule(
         _elementPrototype.webkitMatchesSelector ||
         function elementMatches(node, selector) {
             var nodes = (node.ownerDocument || document).querySelectorAll(selector);
-
-            var i = 0;
-            while (nodes[i] && node !== nodes[i]) {
-                i++;
-            }
-
-            // Coerce as a boolean datatype
-            return Boolean(nodes[i]);
+            return _arrayFrom(nodes).some(function findMatchEl(el) {
+                return node === el;
+            });
         };
 
     var _numberIsNaN = Number.isNaN || isNaN;
@@ -933,7 +927,6 @@ var domElements = (function domElementsModule(
 }(
     window,
     window.document,
-    void 0,
     window.document.head,
     window.document.body,
     window.Array,
