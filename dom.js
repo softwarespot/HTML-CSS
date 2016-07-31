@@ -34,6 +34,7 @@ var domElements = (function domElementsModule(
     var _arrayPrototype = Array.prototype;
     var _arrayFilter = _arrayPrototype.filter;
     var _arraySlice = _arrayPrototype.slice;
+    var _arraySome = _arrayPrototype.some;
 
     var _arrayFrom = Array.from || function arrayFrom(arrayLike) {
         return _arraySlice.call(arrayLike);
@@ -61,7 +62,7 @@ var domElements = (function domElementsModule(
         _elementPrototype.webkitMatchesSelector ||
         function elementMatches(node, selector) {
             var nodes = (node.ownerDocument || document).querySelectorAll(selector);
-            return _arrayFrom(nodes).some(function findMatchEl(el) {
+            return _arraySome.call(nodes, function some(el) {
                 return node === el;
             });
         };
